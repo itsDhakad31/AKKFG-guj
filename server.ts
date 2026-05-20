@@ -9,6 +9,15 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { supabase, supabaseAdmin } from "./src/supabase";
 
+function requireEnv(name: string) {
+  const v = process.env[name];
+  if (!v || !v.trim()) {
+    throw new Error(`Missing required env var: ${name}`);
+  }
+  return v;
+}
+
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
@@ -18,6 +27,18 @@ const DEFAULT_PORT = 3000;
 const JWT_SECRET = process.env.JWT_SECRET || 'akkfg-secret-key-2026';
 const DEFAULT_ADMIN_EMAIL = (process.env.DEFAULT_ADMIN_EMAIL || 'admin@akkfg.com').trim().toLowerCase();
 const DEFAULT_ADMIN_PASSWORD = process.env.DEFAULT_ADMIN_PASSWORD || 'admin123';
+
+let supabaseReady = false;
+try {
+  supabaseReady = !!process.env.SUPABASE_URL && !!process.env.SUPABASE_ANON_KEY;
+  if (!supabaseReady) {
+    console.warn('Warning: Supabase client keys missing; API routes may fail.');
+  }
+} catch (e) {
+  console.warn('Warning: Supabase readiness check failed');
+}
+
+
 
 // Middleware - HOISTED FIRST
 app.use(express.json());
@@ -208,7 +229,12 @@ const getYearFromDateValue = (value: string | null | undefined) => {
 // API Routes - ALL /api/*
 app.get('/api/ping', (req, res) => res.json({ message: 'pong' }));
 
+app.get('/api/healthz', (req, res) => {
+  res.json({ ok: true, supabaseReady });
+});
+
 app.get('/api/site-stats', async (req, res) => {
+
   const currentYear = new Date().getFullYear();
   const [playersRes, coachesRes, districtsRes, eventsRes] = await Promise.all([
     supabase.from('registrations').select('id', { count: 'exact', head: true }).eq('role', 'Student'),
