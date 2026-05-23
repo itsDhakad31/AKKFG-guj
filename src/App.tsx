@@ -23,7 +23,8 @@ import {
   Trash2,
   FileText,
   Play,
-  Image as ImageIcon
+  Image as ImageIcon,
+  CreditCard
 } from 'lucide-react';
 import { NewsItem, EventItem, RegistrationData, SiteStats, User, RegistrationFormData } from './types';
 import { supabase } from './supabase';
@@ -1122,6 +1123,69 @@ const Registration = ({ setActiveTab }: { setActiveTab: (tab: string) => void })
                   {formData.referee_cert && <p className="text-xs text-emerald-600 font-semibold mt-1">✓ File uploaded</p>}
                 </div>
               </div>
+
+              {/* Registration Fees & Bank Details */}
+              <div className="space-y-6 mt-10">
+                <h3 className="text-xl text-akkfg-blue font-bold border-l-4 border-akkfg-orange pl-4">Registration Fees & Bank Details</h3>
+                <div className="bg-slate-50 border border-slate-200 rounded-3xl p-6 sm:p-8 grid grid-cols-1 md:grid-cols-2 gap-8 shadow-sm">
+                  
+                  {/* Registration Fees Section */}
+                  <div className="space-y-4">
+                    <h4 className="text-md font-bold text-akkfg-orange uppercase tracking-wider flex items-center gap-2 font-sans">
+                      <Trophy size={18} /> Registration Fees
+                    </h4>
+                    <div className="space-y-3 font-medium text-slate-700">
+                      <div className="flex justify-between items-center bg-white p-3.5 rounded-xl border border-slate-100 shadow-sm">
+                        <span>Student (Under 14)</span>
+                        <span className="font-bold text-akkfg-blue font-mono">₹50</span>
+                      </div>
+                      <div className="flex justify-between items-center bg-white p-3.5 rounded-xl border border-slate-100 shadow-sm">
+                        <span>Student (Under 19)</span>
+                        <span className="font-bold text-akkfg-blue font-mono">₹80</span>
+                      </div>
+                      <div className="flex justify-between items-center bg-white p-3.5 rounded-xl border border-slate-100 shadow-sm">
+                        <span>Open Category</span>
+                        <span className="font-bold text-akkfg-blue font-mono">₹120</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Bank Account Details Section */}
+                  <div className="space-y-4">
+                    <h4 className="text-md font-bold text-akkfg-orange uppercase tracking-wider flex items-center gap-2 font-sans">
+                      <CreditCard size={18} /> Bank Account for Payment
+                    </h4>
+                    <div className="bg-white rounded-2xl border border-slate-100 p-5 space-y-3.5 text-sm shadow-sm">
+                      <div className="flex flex-col gap-1">
+                        <span className="text-[10px] uppercase font-bold text-slate-400">Bank Name</span>
+                        <span className="font-bold text-slate-700 font-sans text-xs">THE BARODA CITY CO-OPERATIVE BANK LTD.</span>
+                      </div>
+                      <div className="grid grid-cols-2 gap-4 border-t border-slate-50 pt-3">
+                        <div className="flex flex-col gap-0.5">
+                          <span className="text-[10px] uppercase font-bold text-slate-400">Account Name</span>
+                          <span className="font-bold text-akkfg-blue text-xs leading-snug">Amateur Kho kho Federation Gujarat</span>
+                        </div>
+                        <div className="flex flex-col gap-0.5">
+                          <span className="text-[10px] uppercase font-bold text-slate-400">Account No</span>
+                          <span className="font-bold text-akkfg-blue font-mono text-xs leading-snug">CA1006111000805</span>
+                        </div>
+                      </div>
+                      <div className="grid grid-cols-2 gap-4 border-t border-slate-50 pt-3">
+                        <div className="flex flex-col gap-0.5">
+                          <span className="text-[10px] uppercase font-bold text-slate-400">IFSC Code</span>
+                          <span className="font-bold text-akkfg-blue font-mono text-xs leading-snug">HDFCOCTBCCB</span>
+                        </div>
+                        <div className="flex flex-col gap-0.5">
+                          <span className="text-[10px] uppercase font-bold text-slate-400">Branch</span>
+                          <span className="font-bold text-akkfg-blue text-xs leading-snug">HEAD OFFICE</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+
             </div>
           )}
 
