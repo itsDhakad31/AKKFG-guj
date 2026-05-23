@@ -1,16 +1,16 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import {
-  Trophy, 
-  Users, 
-  Calendar, 
-  Newspaper, 
-  Download, 
-  Phone, 
-  Mail, 
-  MapPin, 
-  ChevronRight, 
-  Menu, 
+  Trophy,
+  Users,
+  Calendar,
+  Newspaper,
+  Download,
+  Phone,
+  Mail,
+  MapPin,
+  ChevronRight,
+  Menu,
   X,
   UserPlus,
   ArrowRight,
@@ -88,14 +88,14 @@ const LoginModal = ({ isOpen, onClose, onLogin }: { isOpen: boolean, onClose: ()
 
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
-      <motion.div 
-        initial={{ opacity: 0 }} 
-        animate={{ opacity: 1 }} 
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
         onClick={onClose}
         className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm"
       />
-      <motion.div 
+      <motion.div
         initial={{ opacity: 0, scale: 0.9, y: 20 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.9, y: 20 }}
@@ -107,13 +107,13 @@ const LoginModal = ({ isOpen, onClose, onLogin }: { isOpen: boolean, onClose: ()
         </div>
         <form onSubmit={handleSubmit} className="p-8 space-y-4">
           {error && <div className="p-3 bg-red-50 text-red-600 text-xs font-bold rounded-lg border border-red-100">{error}</div>}
-          
+
           {isRegister && (
             <div className="space-y-1">
               <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Full Name</label>
-              <input 
+              <input
                 required
-                type="text" 
+                type="text"
                 className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-akkfg-orange"
                 value={name}
                 onChange={e => setName(e.target.value)}
@@ -122,9 +122,9 @@ const LoginModal = ({ isOpen, onClose, onLogin }: { isOpen: boolean, onClose: ()
           )}
           <div className="space-y-1">
             <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Email Address</label>
-            <input 
+            <input
               required
-              type="email" 
+              type="email"
               className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-akkfg-orange"
               value={email}
               onChange={e => setEmail(e.target.value)}
@@ -132,18 +132,18 @@ const LoginModal = ({ isOpen, onClose, onLogin }: { isOpen: boolean, onClose: ()
           </div>
           <div className="space-y-1">
             <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Password</label>
-            <input 
+            <input
               required
-              type="password" 
+              type="password"
               className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-akkfg-orange"
               value={password}
               onChange={e => setPassword(e.target.value)}
             />
           </div>
-          
-          <button 
+
+          <button
             disabled={loading}
-            type="submit" 
+            type="submit"
             className="w-full bg-akkfg-orange text-white py-4 rounded-xl font-bold shadow-lg hover:bg-akkfg-orange/90 transition-all disabled:opacity-50"
           >
             {loading ? 'Processing...' : (isRegister ? 'Register' : 'Login')}
@@ -186,7 +186,7 @@ const LoginModal = ({ isOpen, onClose, onLogin }: { isOpen: boolean, onClose: ()
           </button>
 
           <div className="text-center pt-4">
-            <button 
+            <button
               type="button"
               onClick={() => setIsRegister(!isRegister)}
               className="text-sm text-slate-500 hover:text-akkfg-blue font-medium"
@@ -203,8 +203,8 @@ const LoginModal = ({ isOpen, onClose, onLogin }: { isOpen: boolean, onClose: ()
   );
 };
 
-const Navbar = ({ activeTab, setActiveTab, user, onLogout, onOpenLogin }: { 
-  activeTab: string, 
+const Navbar = ({ activeTab, setActiveTab, user, onLogout, onOpenLogin }: {
+  activeTab: string,
   setActiveTab: (tab: string) => void,
   user: User | null,
   onLogout: () => void,
@@ -228,9 +228,9 @@ const Navbar = ({ activeTab, setActiveTab, user, onLogout, onOpenLogin }: {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-20">
           <div className="flex items-center gap-3 cursor-pointer" onClick={() => setActiveTab('home')}>
-            <img 
-              src="https://files.catbox.moe/u0lznd.jpg" 
-              alt="AKKFG Logo" 
+            <img
+              src="https://files.catbox.moe/u0lznd.jpg"
+              alt="AKKFG Logo"
               className="w-12 h-12 object-contain rounded-full shadow-lg border border-slate-100 bg-white p-0.5"
               referrerPolicy="no-referrer"
             />
@@ -257,10 +257,10 @@ const Navbar = ({ activeTab, setActiveTab, user, onLogout, onOpenLogin }: {
                 )}
               </button>
             ))}
-            
+
             {user ? (
               <div className="relative">
-                <button 
+                <button
                   onClick={() => setShowUserMenu(!showUserMenu)}
                   className="flex items-center gap-2 bg-slate-100 px-4 py-2 rounded-full text-sm font-bold text-akkfg-blue hover:bg-slate-200 transition-colors"
                 >
@@ -269,7 +269,7 @@ const Navbar = ({ activeTab, setActiveTab, user, onLogout, onOpenLogin }: {
                 </button>
                 <AnimatePresence>
                   {showUserMenu && (
-                    <motion.div 
+                    <motion.div
                       initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, y: 10 }}
@@ -279,7 +279,7 @@ const Navbar = ({ activeTab, setActiveTab, user, onLogout, onOpenLogin }: {
                         <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">Signed in as</p>
                         <p className="text-sm font-bold text-akkfg-blue truncate">{user.email}</p>
                       </div>
-                      <button 
+                      <button
                         onClick={() => {
                           setActiveTab('dashboard');
                           setShowUserMenu(false);
@@ -289,7 +289,7 @@ const Navbar = ({ activeTab, setActiveTab, user, onLogout, onOpenLogin }: {
                         <ShieldCheck size={16} /> Dashboard
                       </button>
                       {user.role === 'Admin' && (
-                        <button 
+                        <button
                           onClick={() => {
                             setActiveTab('admin');
                             setShowUserMenu(false);
@@ -299,7 +299,7 @@ const Navbar = ({ activeTab, setActiveTab, user, onLogout, onOpenLogin }: {
                           <ShieldCheck size={16} /> Admin Panel
                         </button>
                       )}
-                      <button 
+                      <button
                         onClick={() => {
                           onLogout();
                           setShowUserMenu(false);
@@ -313,7 +313,7 @@ const Navbar = ({ activeTab, setActiveTab, user, onLogout, onOpenLogin }: {
                 </AnimatePresence>
               </div>
             ) : (
-              <button 
+              <button
                 onClick={onOpenLogin}
                 className="bg-akkfg-blue text-white px-6 py-2 rounded-full text-sm font-semibold hover:bg-akkfg-blue/90 transition-all shadow-md flex items-center gap-2"
               >
@@ -376,7 +376,7 @@ const Navbar = ({ activeTab, setActiveTab, user, onLogout, onOpenLogin }: {
                       Admin Panel
                     </button>
                   )}
-                  <button 
+                  <button
                     onClick={() => {
                       onLogout();
                       setIsOpen(false);
@@ -387,7 +387,7 @@ const Navbar = ({ activeTab, setActiveTab, user, onLogout, onOpenLogin }: {
                   </button>
                 </>
               ) : (
-                <button 
+                <button
                   onClick={() => {
                     onOpenLogin();
                     setIsOpen(false);
@@ -411,9 +411,9 @@ const Footer = () => (
       <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
         <div className="space-y-4">
           <div className="flex items-center gap-3">
-            <img 
-              src="https://files.catbox.moe/u0lznd.jpg" 
-              alt="AKKFG Logo" 
+            <img
+              src="https://files.catbox.moe/u0lznd.jpg"
+              alt="AKKFG Logo"
               className="w-10 h-10 object-contain rounded-full bg-white p-0.5 border border-slate-700 shadow-sm"
               referrerPolicy="no-referrer"
             />
@@ -453,9 +453,9 @@ const Footer = () => (
           <h3 className="text-white font-bold mb-6">Newsletter</h3>
           <p className="text-sm mb-4">Stay updated with the latest news and events.</p>
           <div className="flex gap-2">
-            <input 
-              type="email" 
-              placeholder="Your email" 
+            <input
+              type="email"
+              placeholder="Your email"
               className="bg-slate-800 border-none rounded-lg px-4 py-2 text-sm w-full focus:ring-1 focus:ring-akkfg-orange"
             />
             <button className="bg-akkfg-orange text-white p-2 rounded-lg hover:bg-akkfg-orange/90">
@@ -519,17 +519,17 @@ const Home = ({ setActiveTab }: { setActiveTab: (tab: string) => void }) => {
       <section className="relative h-[85vh] flex items-center overflow-hidden bg-akkfg-blue">
         <div className="absolute inset-0 z-0">
 
-<img 
-            src="https://i.ibb.co/TDRxm07w/Kho-Kho-Ground-Measurement-1024x614-1.webp" 
+          <img
+            src="https://i.ibb.co/TDRxm07w/Kho-Kho-Ground-Measurement-1024x614-1.webp"
             className="w-full h-full object-cover opacity-20"
             referrerPolicy="no-referrer"
           />
           <div className="absolute inset-0 bg-gradient-to-r from-akkfg-blue via-akkfg-blue/90 to-transparent" />
 
         </div>
-        
+
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
@@ -539,20 +539,20 @@ const Home = ({ setActiveTab }: { setActiveTab: (tab: string) => void }) => {
               Official State Federation
             </span>
             <h1 className="text-5xl md:text-7xl text-white mb-6 leading-tight">
-Reviving the Spirit of <span className="text-akkfg-orange">Kho-Kho</span> in Gujarat
+              Reviving the Spirit of <span className="text-akkfg-orange">Kho-Kho</span> in Gujarat
 
             </h1>
             <p className="text-lg text-slate-300 mb-10 leading-relaxed">
               Empowering athletes, fostering sportsmanship, and building a world-class ecosystem for the traditional sport of Kho-Kho across every district of Gujarat.
             </p>
             <div className="flex flex-wrap gap-4">
-              <button 
+              <button
                 onClick={() => setActiveTab('register')}
                 className="bg-akkfg-orange text-white px-8 py-4 rounded-full font-bold text-lg hover:scale-105 transition-transform shadow-xl flex items-center gap-2"
               >
                 Register as Player <ChevronRight size={20} />
               </button>
-              <button 
+              <button
                 onClick={() => setActiveTab('events')}
                 className="bg-white/10 backdrop-blur-md text-white border border-white/20 px-8 py-4 rounded-full font-bold text-lg hover:bg-white/20 transition-all"
               >
@@ -567,7 +567,7 @@ Reviving the Spirit of <span className="text-akkfg-orange">Kho-Kho</span> in Guj
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-32 relative z-20">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           {statsCards.map((stat, i) => (
-            <motion.div 
+            <motion.div
               key={i}
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -596,10 +596,10 @@ Reviving the Spirit of <span className="text-akkfg-orange">Kho-Kho</span> in Guj
             View All News <ChevronRight size={18} />
           </button>
         </div>
-        
+
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {news.map((item, i) => (
-            <motion.div 
+            <motion.div
               key={item.id}
               initial={{ opacity: 0, scale: 0.95 }}
               whileInView={{ opacity: 1, scale: 1 }}
@@ -608,8 +608,8 @@ Reviving the Spirit of <span className="text-akkfg-orange">Kho-Kho</span> in Guj
               className="group bg-white rounded-2xl overflow-hidden border border-slate-200 hover:shadow-xl transition-all"
             >
               <div className="h-48 overflow-hidden relative">
-                <img 
-                  src={item.image} 
+                <img
+                  src={item.image}
                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                   referrerPolicy="no-referrer"
                 />
@@ -640,10 +640,10 @@ Reviving the Spirit of <span className="text-akkfg-orange">Kho-Kho</span> in Guj
             <h2 className="text-4xl text-akkfg-blue mb-4">Upcoming Tournaments</h2>
             <p className="text-slate-500 max-w-2xl mx-auto">Check out the upcoming state and district level competitions. Register your team today!</p>
           </div>
-          
+
           <div className="space-y-4">
             {events.map((event, i) => (
-              <motion.div 
+              <motion.div
                 key={event.id}
                 initial={{ opacity: 0, x: -20 }}
                 whileInView={{ opacity: 1, x: 0 }}
@@ -682,7 +682,7 @@ Reviving the Spirit of <span className="text-akkfg-orange">Kho-Kho</span> in Guj
             <div className="relative z-10">
               <h3 className="text-3xl mb-4">Player Registration</h3>
               <p className="text-white/80 mb-8 max-w-md">Join the official database of Gujarat Kho-Kho players. Get your digital ID and eligibility for state tournaments.</p>
-              <button 
+              <button
                 onClick={() => setActiveTab('register')}
                 className="bg-white text-akkfg-orange px-8 py-3 rounded-full font-bold hover:scale-105 transition-transform"
               >
@@ -691,12 +691,12 @@ Reviving the Spirit of <span className="text-akkfg-orange">Kho-Kho</span> in Guj
             </div>
             <Users size={200} className="absolute -bottom-10 -right-10 text-white/10 group-hover:scale-110 transition-transform duration-700" />
           </div>
-          
+
           <div className="bg-akkfg-blue rounded-3xl p-10 text-white relative overflow-hidden group">
             <div className="relative z-10">
               <h3 className="text-3xl mb-4">Download Center</h3>
               <p className="text-white/80 mb-8 max-w-md">Access official forms, circulars, rulebooks, and tournament guidelines directly from the federation.</p>
-              <button 
+              <button
                 onClick={() => setActiveTab('downloads')}
                 className="bg-white text-akkfg-blue px-8 py-3 rounded-full font-bold hover:scale-105 transition-transform"
               >
@@ -714,7 +714,7 @@ Reviving the Spirit of <span className="text-akkfg-orange">Kho-Kho</span> in Guj
 const About = () => (
   <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 space-y-20">
     <section className="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
-      <motion.div 
+      <motion.div
         initial={{ opacity: 0, x: -30 }}
         animate={{ opacity: 1, x: 0 }}
       >
@@ -740,7 +740,7 @@ const About = () => (
           </div>
         </div>
       </motion.div>
-      <motion.div 
+      <motion.div
         initial={{ opacity: 0, x: 30 }}
         animate={{ opacity: 1, x: 0 }}
         className="rounded-3xl overflow-hidden shadow-2xl"
@@ -774,9 +774,9 @@ const IDCard = ({ data }: { data: RegistrationData }) => (
   <div className="w-full max-w-sm mx-auto bg-white rounded-2xl shadow-2xl overflow-hidden border-2 border-akkfg-blue relative">
     <div className="bg-akkfg-blue p-4 text-white flex items-center justify-center gap-3 relative overflow-hidden">
       <div className="absolute top-0 right-0 w-20 h-20 bg-akkfg-orange rotate-45 translate-x-10 -translate-y-10" />
-      <img 
-        src="https://files.catbox.moe/u0lznd.jpg" 
-        alt="AKKFG Logo" 
+      <img
+        src="https://files.catbox.moe/u0lznd.jpg"
+        alt="AKKFG Logo"
         className="w-10 h-10 object-contain rounded-full bg-white p-0.5 relative z-10"
         referrerPolicy="no-referrer"
       />
@@ -785,22 +785,22 @@ const IDCard = ({ data }: { data: RegistrationData }) => (
         <p className="text-[9px] uppercase tracking-widest opacity-80 font-semibold">Gujarat Kho-Kho Federation</p>
       </div>
     </div>
-    
+
     <div className="p-6 flex flex-col items-center">
       <div className="w-32 h-32 bg-slate-100 rounded-xl border-4 border-white shadow-md overflow-hidden mb-4">
-        <img 
-          src={data.doc_photo || `https://i.pravatar.cc/150?u=${data.name}`} 
+        <img
+          src={data.doc_photo || `https://i.pravatar.cc/150?u=${data.name}`}
           className="w-full h-full object-cover"
           referrerPolicy="no-referrer"
         />
       </div>
-      
+
       <div className="text-center space-y-1.5 mb-6 w-full">
         <h4 className="text-xl font-bold text-akkfg-blue uppercase">{data.name}</h4>
         <p className="text-akkfg-orange font-bold text-sm tracking-widest uppercase mb-2">
           {data.role === 'Student' ? 'Player' : data.role === 'Technical' ? 'Technical Team' : data.role}
         </p>
-        
+
         {/* Generated 3 IDs */}
         <div className="bg-slate-50 border border-slate-100 rounded-xl p-3 space-y-2 text-[11px] font-mono text-left max-w-[280px] mx-auto shadow-inner">
           <div className="flex justify-between items-center">
@@ -821,7 +821,7 @@ const IDCard = ({ data }: { data: RegistrationData }) => (
           </div>
         </div>
       </div>
-      
+
       <div className="w-full grid grid-cols-2 gap-4 text-[10px] border-t border-slate-100 pt-4">
         <div>
           <p className="text-slate-400 uppercase font-bold">DOB</p>
@@ -837,7 +837,7 @@ const IDCard = ({ data }: { data: RegistrationData }) => (
         </div>
       </div>
     </div>
-    
+
     <div className="bg-slate-50 p-3 text-center border-t border-slate-100">
       <p className="text-[8px] text-slate-400 uppercase font-bold tracking-tighter">Authorized by Amateur Kho-Kho Federation Gujarat</p>
     </div>
@@ -965,7 +965,7 @@ const Registration = ({ setActiveTab }: { setActiveTab: (tab: string) => void })
           </div>
           <h2 className="text-3xl text-akkfg-blue mb-4">Registration Submitted!</h2>
           <p className="text-slate-600 mb-8">Your application has been successfully submitted to the Amateur Kho-Kho Federation Gujarat. Our administrators will review your documents and details.</p>
-          
+
           <div className="bg-amber-50 p-8 rounded-3xl border border-amber-100 max-w-2xl mx-auto mb-12">
             <h3 className="text-xl font-bold text-amber-800 mb-2">What happens next?</h3>
             <ul className="text-left text-amber-700 space-y-3 text-sm">
@@ -975,7 +975,7 @@ const Registration = ({ setActiveTab }: { setActiveTab: (tab: string) => void })
             </ul>
           </div>
 
-          <button 
+          <button
             onClick={() => {
               setSubmitted(false);
               setActiveTab('home');
@@ -1035,12 +1035,12 @@ const Registration = ({ setActiveTab }: { setActiveTab: (tab: string) => void })
             Sign up with Google
           </button>
         </div>
-        
+
         <div className="flex border-b border-slate-100">
           {['Student', 'Coach', 'Technical'].map(role => (
             <button
               key={role}
-              onClick={() => setFormData({...formData, role: role as any})}
+              onClick={() => setFormData({ ...formData, role: role as any })}
               className={`flex-1 py-6 font-bold text-lg transition-all ${formData.role === role ? 'text-akkfg-orange bg-akkfg-orange/5 border-b-2 border-akkfg-orange' : 'text-slate-400 hover:text-slate-600'}`}
             >
               {role === 'Student' ? 'Player' : role === 'Technical' ? 'Technical Team' : role} Registration
@@ -1055,15 +1055,15 @@ const Registration = ({ setActiveTab }: { setActiveTab: (tab: string) => void })
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-2">
                 <label className="text-sm font-bold text-slate-700">Full Name</label>
-                <input required type="text" className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-akkfg-orange" value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})} />
+                <input required type="text" className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-akkfg-orange" value={formData.name} onChange={e => setFormData({ ...formData, name: e.target.value })} />
               </div>
               <div className="space-y-2">
                 <label className="text-sm font-bold text-slate-700">Date of Birth</label>
-                <input required type="date" className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-akkfg-orange" value={formData.dob} onChange={e => setFormData({...formData, dob: e.target.value})} />
+                <input required type="date" className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-akkfg-orange" value={formData.dob} onChange={e => setFormData({ ...formData, dob: e.target.value })} />
               </div>
               <div className="space-y-2">
                 <label className="text-sm font-bold text-slate-700">Gender</label>
-                <select className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-akkfg-orange" value={formData.gender} onChange={e => setFormData({...formData, gender: e.target.value})}>
+                <select className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-akkfg-orange" value={formData.gender} onChange={e => setFormData({ ...formData, gender: e.target.value })}>
                   <option>Male</option>
                   <option>Female</option>
                   <option>Other</option>
@@ -1071,28 +1071,28 @@ const Registration = ({ setActiveTab }: { setActiveTab: (tab: string) => void })
               </div>
               <div className="space-y-2">
                 <label className="text-sm font-bold text-slate-700">Mobile Number</label>
-                <input required type="tel" className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-akkfg-orange" value={formData.mobile} onChange={e => setFormData({...formData, mobile: e.target.value})} />
+                <input required type="tel" className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-akkfg-orange" value={formData.mobile} onChange={e => setFormData({ ...formData, mobile: e.target.value })} />
               </div>
               <div className="space-y-2">
                 <label className="text-sm font-bold text-slate-700">Email Address</label>
-                <input required type="email" className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-akkfg-orange" value={formData.email} onChange={e => setFormData({...formData, email: e.target.value})} />
+                <input required type="email" className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-akkfg-orange" value={formData.email} onChange={e => setFormData({ ...formData, email: e.target.value })} />
               </div>
               <div className="space-y-2">
                 <label className="text-sm font-bold text-slate-700">City</label>
-                <input required type="text" className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-akkfg-orange" value={formData.address_city} onChange={e => setFormData({...formData, address_city: e.target.value})} />
+                <input required type="text" className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-akkfg-orange" value={formData.address_city} onChange={e => setFormData({ ...formData, address_city: e.target.value })} />
               </div>
               <div className="space-y-2">
                 <label className="text-sm font-bold text-slate-700">Country</label>
-                <input required type="text" className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-akkfg-orange" value={formData.address_country} onChange={e => setFormData({...formData, address_country: e.target.value})} />
+                <input required type="text" className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-akkfg-orange" value={formData.address_country} onChange={e => setFormData({ ...formData, address_country: e.target.value })} />
               </div>
               <div className="space-y-2">
                 <label className="text-sm font-bold text-slate-700">Years of Experience</label>
-                <input required type="text" className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-akkfg-orange" value={formData.experience} onChange={e => setFormData({...formData, experience: e.target.value})} />
+                <input required type="text" className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-akkfg-orange" value={formData.experience} onChange={e => setFormData({ ...formData, experience: e.target.value })} />
               </div>
             </div>
           </div>
 
-          
+
           {/* Professional Info for Students */}
           {formData.role === 'Student' && (
             <div className="space-y-6">
@@ -1100,11 +1100,11 @@ const Registration = ({ setActiveTab }: { setActiveTab: (tab: string) => void })
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-2">
                   <label className="text-sm font-bold text-slate-700">Level of Passing (Kho-Kho Site)</label>
-                  <input type="text" className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-akkfg-orange" value={formData.level_passing} onChange={e => setFormData({...formData, level_passing: e.target.value})} />
+                  <input type="text" className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-akkfg-orange" value={formData.level_passing} onChange={e => setFormData({ ...formData, level_passing: e.target.value })} />
                 </div>
                 <div className="space-y-2">
                   <label className="text-sm font-bold text-slate-700">Year of Passing</label>
-                  <input type="text" className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-akkfg-orange" value={formData.year_passing} onChange={e => setFormData({...formData, year_passing: e.target.value})} />
+                  <input type="text" className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-akkfg-orange" value={formData.year_passing} onChange={e => setFormData({ ...formData, year_passing: e.target.value })} />
                 </div>
                 <div className="space-y-2">
                   <label className="text-sm font-bold text-slate-700">Coaching Certificate</label>
@@ -1156,9 +1156,9 @@ const Registration = ({ setActiveTab }: { setActiveTab: (tab: string) => void })
           {/* Terms */}
           <div className="bg-slate-50 p-6 rounded-2xl border border-slate-100">
             <div className="flex items-start gap-4">
-              <input 
-                type="checkbox" 
-                id="terms" 
+              <input
+                type="checkbox"
+                id="terms"
                 className="mt-1 w-5 h-5 rounded border-slate-300 text-akkfg-orange focus:ring-akkfg-orange"
                 checked={acceptedTerms}
                 onChange={e => setAcceptedTerms(e.target.checked)}
@@ -1190,7 +1190,7 @@ const Events = () => {
         <h2 className="text-4xl text-akkfg-blue mb-4">Tournament Calendar</h2>
         <p className="text-slate-500">Explore and participate in upcoming Kho-Kho events across Gujarat.</p>
       </div>
-      
+
       <div className="grid grid-cols-1 gap-6">
         {events.map((event) => (
           <div key={event.id} className="bg-white p-8 rounded-3xl border border-slate-200 flex flex-col md:flex-row gap-8 items-center">
@@ -1274,8 +1274,8 @@ const MediaNews = () => {
             >
               {article.image && (
                 <div className="relative h-48 overflow-hidden bg-slate-200">
-                  <img 
-                    src={article.image} 
+                  <img
+                    src={article.image}
                     alt={article.title}
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                   />
@@ -1318,7 +1318,7 @@ const MediaNews = () => {
               whileHover={{ scale: 1.05 }}
               className="relative h-48 rounded-2xl overflow-hidden cursor-pointer group"
             >
-              <img 
+              <img
                 src={item.img}
                 alt={item.title}
                 className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
@@ -1344,7 +1344,7 @@ const MediaNews = () => {
               whileHover={{ scale: 1.02 }}
               className="relative h-64 rounded-2xl overflow-hidden cursor-pointer group bg-slate-200"
             >
-              <img 
+              <img
                 src={video.thumbnail}
                 alt={video.title}
                 className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
@@ -1409,7 +1409,7 @@ const Contact = () => {
       setErrorMessage('All fields are required.');
       return;
     }
-    
+
     // Validate Email
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
@@ -1456,7 +1456,7 @@ const Contact = () => {
         <div>
           <h2 className="text-4xl text-akkfg-blue mb-6">Get in Touch</h2>
           <p className="text-slate-500 mb-10">Have questions about registrations or upcoming events? Our team is here to help you.</p>
-          
+
           <div className="space-y-8">
             <div className="flex gap-6">
               <div className="w-12 h-12 bg-akkfg-orange/10 rounded-xl flex items-center justify-center text-akkfg-orange shrink-0">
@@ -1487,7 +1487,7 @@ const Contact = () => {
             </div>
           </div>
         </div>
-        
+
         <div className="bg-white p-10 rounded-3xl shadow-xl border border-slate-200 relative overflow-hidden">
           {status === 'success' && (
             <div className="mb-6 p-4 bg-emerald-50 text-emerald-700 rounded-2xl border border-emerald-100 flex items-center gap-3 animate-pulse">
@@ -1513,46 +1513,46 @@ const Contact = () => {
             <div className="grid grid-cols-2 gap-6">
               <div className="space-y-2">
                 <label className="text-sm font-bold text-slate-700">First Name</label>
-                <input 
-                  required 
-                  type="text" 
-                  value={firstName} 
-                  onChange={e => setFirstName(e.target.value)} 
-                  className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-akkfg-orange" 
+                <input
+                  required
+                  type="text"
+                  value={firstName}
+                  onChange={e => setFirstName(e.target.value)}
+                  className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-akkfg-orange"
                 />
               </div>
               <div className="space-y-2">
                 <label className="text-sm font-bold text-slate-700">Last Name</label>
-                <input 
-                  required 
-                  type="text" 
-                  value={lastName} 
-                  onChange={e => setLastName(e.target.value)} 
-                  className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-akkfg-orange" 
+                <input
+                  required
+                  type="text"
+                  value={lastName}
+                  onChange={e => setLastName(e.target.value)}
+                  className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-akkfg-orange"
                 />
               </div>
             </div>
             <div className="space-y-2">
               <label className="text-sm font-bold text-slate-700">Email Address</label>
-              <input 
-                required 
-                type="email" 
-                value={email} 
-                onChange={e => setEmail(e.target.value)} 
-                className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-akkfg-orange" 
+              <input
+                required
+                type="email"
+                value={email}
+                onChange={e => setEmail(e.target.value)}
+                className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-akkfg-orange"
               />
             </div>
             <div className="space-y-2">
               <label className="text-sm font-bold text-slate-700">Message</label>
-              <textarea 
-                required 
-                rows={4} 
-                value={message} 
-                onChange={e => setMessage(e.target.value)} 
+              <textarea
+                required
+                rows={4}
+                value={message}
+                onChange={e => setMessage(e.target.value)}
                 className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-akkfg-orange resize-none"
               ></textarea>
             </div>
-            <button 
+            <button
               disabled={status === 'loading'}
               className="w-full bg-akkfg-blue text-white py-4 rounded-xl font-bold text-lg shadow-lg hover:bg-akkfg-blue/90 transition-all disabled:opacity-50 flex items-center justify-center gap-2"
             >
@@ -1586,12 +1586,12 @@ const Dashboard = ({ user, onCompleteRegistration }: { user: User, onCompleteReg
     fetch('/api/registrations/me', {
       headers: { 'Authorization': `Bearer ${token}` }
     })
-    .then(res => res.json())
-    .then(data => {
-      setRegistration(data);
-      setLoading(false);
-    })
-    .catch(() => setLoading(false));
+      .then(res => res.json())
+      .then(data => {
+        setRegistration(data);
+        setLoading(false);
+      })
+      .catch(() => setLoading(false));
   }, []);
 
   return (
@@ -1650,7 +1650,7 @@ const Dashboard = ({ user, onCompleteRegistration }: { user: User, onCompleteReg
                 <Info className="mx-auto text-amber-500 mb-4" size={40} />
                 <h3 className="text-xl font-bold text-amber-800 mb-2">Not Registered with Federation</h3>
                 <p className="text-amber-700 mb-6">You haven't completed your federation registration yet. Register now to get your unique ID and ID card.</p>
-                <button 
+                <button
                   onClick={onCompleteRegistration}
                   className="bg-amber-600 text-white px-8 py-3 rounded-full font-bold hover:bg-amber-700 transition-colors"
                 >
@@ -1806,7 +1806,7 @@ const AdminPanel = () => {
         fetch(`/api/admin/photos?t=${timestamp}`, { headers: { 'Authorization': `Bearer ${token}` } }),
         fetch(`/api/admin/videos?t=${timestamp}`, { headers: { 'Authorization': `Bearer ${token}` } })
       ]);
-      
+
       if (!regsRes.ok || !statsRes.ok || !eventsRes.ok) {
         throw new Error(`Fetch failed: Regs:${regsRes.status} Stats:${statsRes.status} Events:${eventsRes.status}`);
       }
@@ -1817,9 +1817,9 @@ const AdminPanel = () => {
       const newsData = await newsRes.json();
       const photosData = photosRes.ok ? await photosRes.json() : [];
       const videosData = videosRes.ok ? await videosRes.json() : [];
-      
+
       console.log("AdminPanel: Data fetched successfully", { regs: regsData.length, events: eventsData.length });
-      
+
       setRegistrations(regsData);
       setStats(statsData);
       setEvents(eventsData);
@@ -1842,7 +1842,7 @@ const AdminPanel = () => {
     const token = localStorage.getItem('akkfg_token');
     await fetch(`/api/admin/registrations/${id}/status`, {
       method: 'PUT',
-      headers: { 
+      headers: {
         'Authorization': `Bearer ${token}`,
         'Content-Type': 'application/json'
       },
@@ -1853,14 +1853,14 @@ const AdminPanel = () => {
 
   const handleDeletePlayer = async (id: number) => {
     if (!window.confirm('Are you sure you want to remove this player registration? This action cannot be undone.')) return;
-    
+
     try {
       const token = localStorage.getItem('akkfg_token');
       const response = await fetch(`/api/admin/registrations/${id}`, {
         method: 'DELETE',
         headers: { 'Authorization': `Bearer ${token}` }
       });
-      
+
       if (response.ok) {
         alert("Player registration removed successfully!");
         fetchData();
@@ -1879,7 +1879,7 @@ const AdminPanel = () => {
     const token = localStorage.getItem('akkfg_token');
     await fetch('/api/admin/events', {
       method: 'POST',
-      headers: { 
+      headers: {
         'Authorization': `Bearer ${token}`,
         'Content-Type': 'application/json'
       },
@@ -1892,7 +1892,7 @@ const AdminPanel = () => {
 
   const handleDeleteTournament = async (id: number) => {
     if (!window.confirm('Are you sure you want to delete this tournament?')) return;
-    
+
     try {
       console.log(`Attempting to delete tournament with ID: ${id}`);
       const token = localStorage.getItem('akkfg_token');
@@ -1900,7 +1900,7 @@ const AdminPanel = () => {
         method: 'DELETE',
         headers: { 'Authorization': `Bearer ${token}` }
       });
-      
+
       const result = await response.json();
       console.log('Delete response:', result);
 
@@ -1922,7 +1922,7 @@ const AdminPanel = () => {
     try {
       const response = await fetch('/api/admin/news', {
         method: 'POST',
-        headers: { 
+        headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'
         },
@@ -2084,7 +2084,7 @@ const AdminPanel = () => {
         </div>
         <div className="flex gap-4">
           {(adminTab === 'tournaments' || adminTab === 'news' || adminTab === 'photos' || adminTab === 'videos') && (
-            <button 
+            <button
               onClick={() => {
                 if (adminTab === 'tournaments') setShowTournamentForm(true);
                 else if (adminTab === 'news') setShowNewsForm(true);
@@ -2123,11 +2123,10 @@ const AdminPanel = () => {
           <button
             key={tab.id}
             onClick={() => setAdminTab(tab.id)}
-            className={`px-4 py-3 font-bold text-sm flex items-center gap-2 border-b-2 transition-all whitespace-nowrap ${
-              adminTab === tab.id 
-                ? 'border-akkfg-orange text-akkfg-orange' 
+            className={`px-4 py-3 font-bold text-sm flex items-center gap-2 border-b-2 transition-all whitespace-nowrap ${adminTab === tab.id
+                ? 'border-akkfg-orange text-akkfg-orange'
                 : 'border-transparent text-slate-500 hover:text-akkfg-blue'
-            }`}
+              }`}
           >
             <tab.icon size={18} />
             {tab.label}
@@ -2138,7 +2137,7 @@ const AdminPanel = () => {
       {/* News Form Modal */}
       {showNewsForm && (
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             className="bg-white rounded-3xl p-8 max-w-md w-full shadow-2xl"
@@ -2152,20 +2151,20 @@ const AdminPanel = () => {
             <form onSubmit={handleCreateNews} className="space-y-4">
               <div className="space-y-1">
                 <label className="text-xs font-bold text-slate-500 uppercase">News Title</label>
-                <input required type="text" className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-akkfg-orange" value={newNews.title} onChange={e => setNewNews({...newNews, title: e.target.value})} placeholder="News headline" />
+                <input required type="text" className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-akkfg-orange" value={newNews.title} onChange={e => setNewNews({ ...newNews, title: e.target.value })} placeholder="News headline" />
               </div>
               <div className="space-y-1">
                 <label className="text-xs font-bold text-slate-500 uppercase">Summary</label>
-                <textarea className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-akkfg-orange" value={newNews.summary} onChange={e => setNewNews({...newNews, summary: e.target.value})} placeholder="Brief summary" rows={3} />
+                <textarea className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-akkfg-orange" value={newNews.summary} onChange={e => setNewNews({ ...newNews, summary: e.target.value })} placeholder="Brief summary" rows={3} />
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-1">
                   <label className="text-xs font-bold text-slate-500 uppercase">Date</label>
-                  <input required type="date" className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-akkfg-orange" value={newNews.date} onChange={e => setNewNews({...newNews, date: e.target.value})} />
+                  <input required type="date" className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-akkfg-orange" value={newNews.date} onChange={e => setNewNews({ ...newNews, date: e.target.value })} />
                 </div>
                 <div className="space-y-1">
                   <label className="text-xs font-bold text-slate-500 uppercase">Image URL</label>
-                  <input type="url" className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-akkfg-orange" value={newNews.image} onChange={e => setNewNews({...newNews, image: e.target.value})} placeholder="https://..." />
+                  <input type="url" className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-akkfg-orange" value={newNews.image} onChange={e => setNewNews({ ...newNews, image: e.target.value })} placeholder="https://..." />
                 </div>
               </div>
               <button type="submit" className="w-full bg-akkfg-blue text-white py-4 rounded-xl font-bold shadow-lg hover:bg-akkfg-blue/90 transition-all mt-4">
@@ -2179,7 +2178,7 @@ const AdminPanel = () => {
       {/* Photo Form Modal */}
       {showPhotoForm && (
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             className="bg-white rounded-3xl p-8 max-w-md w-full shadow-2xl"
@@ -2193,7 +2192,7 @@ const AdminPanel = () => {
             <form onSubmit={handleAddPhoto} className="space-y-4">
               <div className="space-y-1">
                 <label className="text-xs font-bold text-slate-500 uppercase">Photo Title</label>
-                <input required type="text" className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-akkfg-orange" value={newPhoto.title} onChange={e => setNewPhoto({...newPhoto, title: e.target.value})} placeholder="Photo title" />
+                <input required type="text" className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-akkfg-orange" value={newPhoto.title} onChange={e => setNewPhoto({ ...newPhoto, title: e.target.value })} placeholder="Photo title" />
               </div>
               <div className="space-y-1">
                 <label className="text-xs font-bold text-slate-500 uppercase">Upload Photo</label>
@@ -2208,7 +2207,7 @@ const AdminPanel = () => {
               </div>
               <div className="space-y-1">
                 <label className="text-xs font-bold text-slate-500 uppercase">Category</label>
-                <select className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-akkfg-orange" value={newPhoto.category} onChange={e => setNewPhoto({...newPhoto, category: e.target.value})}>
+                <select className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-akkfg-orange" value={newPhoto.category} onChange={e => setNewPhoto({ ...newPhoto, category: e.target.value })}>
                   <option>Tournament</option>
                   <option>Training</option>
                   <option>Championship</option>
@@ -2226,7 +2225,7 @@ const AdminPanel = () => {
       {/* Video Form Modal */}
       {showVideoForm && (
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             className="bg-white rounded-3xl p-8 max-w-md w-full shadow-2xl"
@@ -2240,7 +2239,7 @@ const AdminPanel = () => {
             <form onSubmit={handleAddVideo} className="space-y-4">
               <div className="space-y-1">
                 <label className="text-xs font-bold text-slate-500 uppercase">Video Title</label>
-                <input required type="text" className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-akkfg-orange" value={newVideo.title} onChange={e => setNewVideo({...newVideo, title: e.target.value})} placeholder="Video title" />
+                <input required type="text" className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-akkfg-orange" value={newVideo.title} onChange={e => setNewVideo({ ...newVideo, title: e.target.value })} placeholder="Video title" />
               </div>
               <div className="space-y-1">
                 <label className="text-xs font-bold text-slate-500 uppercase">Upload Video</label>
@@ -2263,7 +2262,7 @@ const AdminPanel = () => {
 
       {showTournamentForm && (
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             className="bg-white rounded-3xl p-8 max-w-md w-full shadow-2xl"
@@ -2277,22 +2276,22 @@ const AdminPanel = () => {
             <form onSubmit={handleCreateTournament} className="space-y-4">
               <div className="space-y-1">
                 <label className="text-xs font-bold text-slate-500 uppercase">Tournament Title</label>
-                <input required type="text" className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-akkfg-orange" value={newTournament.title} onChange={e => setNewTournament({...newTournament, title: e.target.value})} placeholder="e.g. Gujarat State Senior Championship" />
+                <input required type="text" className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-akkfg-orange" value={newTournament.title} onChange={e => setNewTournament({ ...newTournament, title: e.target.value })} placeholder="e.g. Gujarat State Senior Championship" />
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-1">
                   <label className="text-xs font-bold text-slate-500 uppercase">Date</label>
-                  <input required type="date" className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-akkfg-orange" value={newTournament.date} onChange={e => setNewTournament({...newTournament, date: e.target.value})} />
+                  <input required type="date" className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-akkfg-orange" value={newTournament.date} onChange={e => setNewTournament({ ...newTournament, date: e.target.value })} />
                 </div>
                 <div className="space-y-1">
                   <label className="text-xs font-bold text-slate-500 uppercase">Location</label>
-                  <input required type="text" className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-akkfg-orange" value={newTournament.location} onChange={e => setNewTournament({...newTournament, location: e.target.value})} placeholder="City" />
+                  <input required type="text" className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-akkfg-orange" value={newTournament.location} onChange={e => setNewTournament({ ...newTournament, location: e.target.value })} placeholder="City" />
                 </div>
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-1">
                   <label className="text-xs font-bold text-slate-500 uppercase">Category</label>
-                  <select className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-akkfg-orange" value={newTournament.category} onChange={e => setNewTournament({...newTournament, category: e.target.value})}>
+                  <select className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-akkfg-orange" value={newTournament.category} onChange={e => setNewTournament({ ...newTournament, category: e.target.value })}>
                     <option>Senior</option>
                     <option>U-17</option>
                     <option>U-14</option>
@@ -2301,7 +2300,7 @@ const AdminPanel = () => {
                 </div>
                 <div className="space-y-1">
                   <label className="text-xs font-bold text-slate-500 uppercase">Status</label>
-                  <select className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-akkfg-orange" value={newTournament.status} onChange={e => setNewTournament({...newTournament, status: e.target.value})}>
+                  <select className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-akkfg-orange" value={newTournament.status} onChange={e => setNewTournament({ ...newTournament, status: e.target.value })}>
                     <option>Upcoming</option>
                     <option>Ongoing</option>
                     <option>Completed</option>
@@ -2318,7 +2317,7 @@ const AdminPanel = () => {
 
       {selectedPlayer && (
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             className="bg-white rounded-3xl p-4 sm:p-8 max-w-4xl w-full shadow-2xl max-h-[90vh] overflow-y-auto"
@@ -2459,7 +2458,7 @@ const AdminPanel = () => {
                     </div>
                   ))}
                 </div>
-                
+
                 <div className="mt-8 p-6 bg-slate-50 rounded-3xl border border-slate-100">
                   <h4 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-4">Registration Status</h4>
                   <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
@@ -2469,13 +2468,13 @@ const AdminPanel = () => {
                     <div className="flex flex-col sm:flex-row gap-2">
                       {selectedPlayer.status === 'Pending' && (
                         <>
-                          <button 
+                          <button
                             onClick={() => { updateStatus(selectedPlayer.id, 'Approved'); setSelectedPlayer(null); }}
                             className="bg-emerald-600 text-white px-4 py-2 rounded-xl text-xs font-bold hover:bg-emerald-700 transition-all"
                           >
                             Approve
                           </button>
-                          <button 
+                          <button
                             onClick={() => { updateStatus(selectedPlayer.id, 'Rejected'); setSelectedPlayer(null); }}
                             className="bg-red-600 text-white px-4 py-2 rounded-xl text-xs font-bold hover:bg-red-700 transition-all"
                           >
@@ -2483,7 +2482,7 @@ const AdminPanel = () => {
                           </button>
                         </>
                       )}
-                      <button 
+                      <button
                         onClick={() => { handleDeletePlayer(selectedPlayer.id); setSelectedPlayer(null); }}
                         className="bg-slate-200 text-slate-600 px-4 py-2 rounded-xl text-xs font-bold hover:bg-red-50 hover:text-red-600 transition-all"
                       >
@@ -2501,109 +2500,46 @@ const AdminPanel = () => {
       <div className="space-y-12">
         {adminTab === 'registrations' && (
           <>
-        <section>
-          <div className="flex items-center gap-4 mb-6">
-            <h3 className="text-2xl font-bold text-akkfg-blue">Federation Registrations</h3>
-            <span className="bg-slate-100 text-slate-600 px-3 py-1 rounded-full text-xs font-bold">{registrations.length}</span>
-          </div>
-          <div className="bg-white rounded-3xl border border-slate-200 overflow-hidden shadow-sm">
-            <div className="md:hidden divide-y divide-slate-100">
-              {registrations.map((reg: any) => (
-                <div key={reg.id} className="p-5 space-y-4">
-                  <div className="flex items-start justify-between gap-3">
-                    <div className="min-w-0">
-                      <p className="font-bold text-akkfg-blue break-words">{reg.name}</p>
-                      <p className="text-[10px] font-mono text-slate-400 break-all">{reg.unique_id || 'Pending Approval'}</p>
-                    </div>
-                    <span className={`shrink-0 px-2 py-1 rounded-md text-[10px] font-bold uppercase ${reg.role === 'Coach' ? 'bg-purple-100 text-purple-700' : reg.role === 'Technical' ? 'bg-amber-100 text-amber-700' : 'bg-blue-100 text-blue-700'}`}>
-                      {reg.role === 'Student' ? 'Player' : reg.role === 'Technical' ? 'Technical Team' : reg.role}
-                    </span>
-                  </div>
-                  <div className="flex items-center justify-between gap-3 text-sm">
-                    <p className="text-slate-600">{reg.address_city}</p>
-                    <span className={`px-2 py-1 rounded-md text-[10px] font-bold uppercase ${reg.status === 'Approved' ? 'bg-emerald-100 text-emerald-700' : reg.status === 'Rejected' ? 'bg-red-100 text-red-700' : 'bg-amber-100 text-amber-700'}`}>
-                      {reg.status}
-                    </span>
-                  </div>
-                  <div className="flex flex-wrap gap-3">
-                    <button 
-                      onClick={() => setSelectedPlayer(reg)}
-                      className="text-xs font-bold text-akkfg-blue hover:underline"
-                    >
-                      View Profile
-                    </button>
-                    {reg.status === 'Pending' && (
-                      <>
-                        <button 
-                          onClick={() => updateStatus(reg.id, 'Approved')}
-                          className="text-xs font-bold text-emerald-600 hover:underline"
-                        >
-                          Approve
-                        </button>
-                        <button 
-                          onClick={() => updateStatus(reg.id, 'Rejected')}
-                          className="text-xs font-bold text-red-600 hover:underline"
-                        >
-                          Reject
-                        </button>
-                      </>
-                    )}
-                    <button 
-                      onClick={() => handleDeletePlayer(reg.id)}
-                      className="text-xs font-bold text-slate-400 hover:text-red-600 transition-colors"
-                      title="Remove Registration"
-                    >
-                      Delete
-                    </button>
-                  </div>
-                </div>
-              ))}
-            </div>
-            <div className="hidden md:block overflow-x-auto">
-              <table className="w-full text-left">
-                <thead className="bg-slate-50 border-b border-slate-100">
-                  <tr>
-                    <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase">ID / Name</th>
-                    <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase">Role</th>
-                    <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase">District</th>
-                    <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase">Status</th>
-                    <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase text-right">Actions</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-slate-50">
+            <section>
+              <div className="flex items-center gap-4 mb-6">
+                <h3 className="text-2xl font-bold text-akkfg-blue">Federation Registrations</h3>
+                <span className="bg-slate-100 text-slate-600 px-3 py-1 rounded-full text-xs font-bold">{registrations.length}</span>
+              </div>
+              <div className="bg-white rounded-3xl border border-slate-200 overflow-hidden shadow-sm">
+                <div className="md:hidden divide-y divide-slate-100">
                   {registrations.map((reg: any) => (
-                    <tr key={reg.id} className="hover:bg-slate-50/50 transition-colors">
-                      <td className="px-6 py-4">
-                        <p className="font-bold text-akkfg-blue">{reg.name}</p>
-                        <p className="text-[10px] font-mono text-slate-400">{reg.unique_id}</p>
-                      </td>
-                      <td className="px-6 py-4">
-                        <span className={`px-2 py-1 rounded-md text-[10px] font-bold uppercase ${reg.role === 'Coach' ? 'bg-purple-100 text-purple-700' : reg.role === 'Technical' ? 'bg-amber-100 text-amber-700' : 'bg-blue-100 text-blue-700'}`}>
+                    <div key={reg.id} className="p-5 space-y-4">
+                      <div className="flex items-start justify-between gap-3">
+                        <div className="min-w-0">
+                          <p className="font-bold text-akkfg-blue break-words">{reg.name}</p>
+                          <p className="text-[10px] font-mono text-slate-400 break-all">{reg.unique_id || 'Pending Approval'}</p>
+                        </div>
+                        <span className={`shrink-0 px-2 py-1 rounded-md text-[10px] font-bold uppercase ${reg.role === 'Coach' ? 'bg-purple-100 text-purple-700' : reg.role === 'Technical' ? 'bg-amber-100 text-amber-700' : 'bg-blue-100 text-blue-700'}`}>
                           {reg.role === 'Student' ? 'Player' : reg.role === 'Technical' ? 'Technical Team' : reg.role}
                         </span>
-                      </td>
-                      <td className="px-6 py-4 text-sm text-slate-600">{reg.address_city}</td>
-                      <td className="px-6 py-4">
+                      </div>
+                      <div className="flex items-center justify-between gap-3 text-sm">
+                        <p className="text-slate-600">{reg.address_city}</p>
                         <span className={`px-2 py-1 rounded-md text-[10px] font-bold uppercase ${reg.status === 'Approved' ? 'bg-emerald-100 text-emerald-700' : reg.status === 'Rejected' ? 'bg-red-100 text-red-700' : 'bg-amber-100 text-amber-700'}`}>
                           {reg.status}
                         </span>
-                      </td>
-                      <td className="px-6 py-4 text-right space-x-3">
-                        <button 
+                      </div>
+                      <div className="flex flex-wrap gap-3">
+                        <button
                           onClick={() => setSelectedPlayer(reg)}
                           className="text-xs font-bold text-akkfg-blue hover:underline"
                         >
-                          View
+                          View Profile
                         </button>
                         {reg.status === 'Pending' && (
                           <>
-                            <button 
+                            <button
                               onClick={() => updateStatus(reg.id, 'Approved')}
                               className="text-xs font-bold text-emerald-600 hover:underline"
                             >
                               Approve
                             </button>
-                            <button 
+                            <button
                               onClick={() => updateStatus(reg.id, 'Rejected')}
                               className="text-xs font-bold text-red-600 hover:underline"
                             >
@@ -2611,181 +2547,244 @@ const AdminPanel = () => {
                             </button>
                           </>
                         )}
-                        <button 
+                        <button
                           onClick={() => handleDeletePlayer(reg.id)}
                           className="text-xs font-bold text-slate-400 hover:text-red-600 transition-colors"
                           title="Remove Registration"
                         >
-                          <Trash2 size={14} className="inline" />
+                          Delete
                         </button>
-                      </td>
-                    </tr>
+                      </div>
+                    </div>
                   ))}
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </section>
+                </div>
+                <div className="hidden md:block overflow-x-auto">
+                  <table className="w-full text-left">
+                    <thead className="bg-slate-50 border-b border-slate-100">
+                      <tr>
+                        <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase">ID / Name</th>
+                        <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase">Role</th>
+                        <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase">District</th>
+                        <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase">Status</th>
+                        <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase text-right">Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-slate-50">
+                      {registrations.map((reg: any) => (
+                        <tr key={reg.id} className="hover:bg-slate-50/50 transition-colors">
+                          <td className="px-6 py-4">
+                            <p className="font-bold text-akkfg-blue">{reg.name}</p>
+                            <p className="text-[10px] font-mono text-slate-400">{reg.unique_id}</p>
+                          </td>
+                          <td className="px-6 py-4">
+                            <span className={`px-2 py-1 rounded-md text-[10px] font-bold uppercase ${reg.role === 'Coach' ? 'bg-purple-100 text-purple-700' : reg.role === 'Technical' ? 'bg-amber-100 text-amber-700' : 'bg-blue-100 text-blue-700'}`}>
+                              {reg.role === 'Student' ? 'Player' : reg.role === 'Technical' ? 'Technical Team' : reg.role}
+                            </span>
+                          </td>
+                          <td className="px-6 py-4 text-sm text-slate-600">{reg.address_city}</td>
+                          <td className="px-6 py-4">
+                            <span className={`px-2 py-1 rounded-md text-[10px] font-bold uppercase ${reg.status === 'Approved' ? 'bg-emerald-100 text-emerald-700' : reg.status === 'Rejected' ? 'bg-red-100 text-red-700' : 'bg-amber-100 text-amber-700'}`}>
+                              {reg.status}
+                            </span>
+                          </td>
+                          <td className="px-6 py-4 text-right space-x-3">
+                            <button
+                              onClick={() => setSelectedPlayer(reg)}
+                              className="text-xs font-bold text-akkfg-blue hover:underline"
+                            >
+                              View
+                            </button>
+                            {reg.status === 'Pending' && (
+                              <>
+                                <button
+                                  onClick={() => updateStatus(reg.id, 'Approved')}
+                                  className="text-xs font-bold text-emerald-600 hover:underline"
+                                >
+                                  Approve
+                                </button>
+                                <button
+                                  onClick={() => updateStatus(reg.id, 'Rejected')}
+                                  className="text-xs font-bold text-red-600 hover:underline"
+                                >
+                                  Reject
+                                </button>
+                              </>
+                            )}
+                            <button
+                              onClick={() => handleDeletePlayer(reg.id)}
+                              className="text-xs font-bold text-slate-400 hover:text-red-600 transition-colors"
+                              title="Remove Registration"
+                            >
+                              <Trash2 size={14} className="inline" />
+                            </button>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </section>
           </>
         )}
 
         {adminTab === 'tournaments' && (
           <>
-        <section className="mt-16">
-          <div className="flex items-center gap-4 mb-6">
-            <h3 className="text-2xl font-bold text-akkfg-blue">Manage Tournaments</h3>
-            <span className="bg-slate-100 text-slate-600 px-3 py-1 rounded-full text-xs font-bold">{events.length}</span>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {events.map((event: any) => (
-              <div key={event.id} className="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm hover:shadow-md transition-all group">
-                <div className="flex justify-between items-start mb-4">
-                  <span className={`px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest ${event.status === 'Upcoming' ? 'bg-blue-100 text-blue-700' : event.status === 'Ongoing' ? 'bg-amber-100 text-amber-700' : 'bg-slate-100 text-slate-700'}`}>
-                    {event.status}
-                  </span>
-                  <button 
-                    onClick={() => handleDeleteTournament(event.id)}
-                    className="p-2 bg-slate-50 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-xl transition-all"
-                    title="Delete Tournament"
-                  >
-                    <Trash2 size={20} />
-                  </button>
-                </div>
-                <h4 className="text-xl font-bold text-akkfg-blue mb-2 group-hover:text-akkfg-orange transition-colors">{event.title}</h4>
-                <div className="space-y-2 text-sm text-slate-500">
-                  <div className="flex items-center gap-2">
-                    <Calendar size={14} className="text-akkfg-orange" />
-                    <span>{new Date(event.date).toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' })}</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <MapPin size={14} className="text-akkfg-orange" />
-                    <span>{event.location}</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <Trophy size={14} className="text-akkfg-orange" />
-                    <span>{event.category} Category</span>
-                  </div>
-                </div>
+            <section className="mt-16">
+              <div className="flex items-center gap-4 mb-6">
+                <h3 className="text-2xl font-bold text-akkfg-blue">Manage Tournaments</h3>
+                <span className="bg-slate-100 text-slate-600 px-3 py-1 rounded-full text-xs font-bold">{events.length}</span>
               </div>
-            ))}
-            {events.length === 0 && (
-              <div className="col-span-full py-12 text-center bg-slate-50 rounded-3xl border-2 border-dashed border-slate-200 text-slate-400">
-                No tournaments created yet.
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {events.map((event: any) => (
+                  <div key={event.id} className="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm hover:shadow-md transition-all group">
+                    <div className="flex justify-between items-start mb-4">
+                      <span className={`px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest ${event.status === 'Upcoming' ? 'bg-blue-100 text-blue-700' : event.status === 'Ongoing' ? 'bg-amber-100 text-amber-700' : 'bg-slate-100 text-slate-700'}`}>
+                        {event.status}
+                      </span>
+                      <button
+                        onClick={() => handleDeleteTournament(event.id)}
+                        className="p-2 bg-slate-50 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-xl transition-all"
+                        title="Delete Tournament"
+                      >
+                        <Trash2 size={20} />
+                      </button>
+                    </div>
+                    <h4 className="text-xl font-bold text-akkfg-blue mb-2 group-hover:text-akkfg-orange transition-colors">{event.title}</h4>
+                    <div className="space-y-2 text-sm text-slate-500">
+                      <div className="flex items-center gap-2">
+                        <Calendar size={14} className="text-akkfg-orange" />
+                        <span>{new Date(event.date).toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' })}</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <MapPin size={14} className="text-akkfg-orange" />
+                        <span>{event.location}</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <Trophy size={14} className="text-akkfg-orange" />
+                        <span>{event.category} Category</span>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+                {events.length === 0 && (
+                  <div className="col-span-full py-12 text-center bg-slate-50 rounded-3xl border-2 border-dashed border-slate-200 text-slate-400">
+                    No tournaments created yet.
+                  </div>
+                )}
               </div>
-            )}
-          </div>
-        </section>
+            </section>
           </>
         )}
 
         {adminTab === 'news' && (
           <>
-        <section>
-          <div className="flex items-center gap-4 mb-6">
-            <h3 className="text-2xl font-bold text-akkfg-blue">News Management</h3>
-            <span className="bg-slate-100 text-slate-600 px-3 py-1 rounded-full text-xs font-bold">{news.length}</span>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {news.map((article: any) => (
-              <div key={article.id} className="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm hover:shadow-md transition-all group">
-                {article.image && <img src={article.image} alt={article.title} className="w-full h-40 object-cover rounded-2xl mb-4" />}
-                <h4 className="text-lg font-bold text-akkfg-blue mb-2 group-hover:text-akkfg-orange transition-colors">{article.title}</h4>
-                <p className="text-sm text-slate-500 mb-4 line-clamp-2">{article.summary}</p>
-                <div className="flex items-center justify-between text-xs text-slate-400">
-                  <span>{new Date(article.date).toLocaleDateString()}</span>
-                  <button 
-                    onClick={() => handleDeleteNews(article.id)}
-                    className="text-red-600 hover:text-red-700 font-bold"
-                  >
-                    <Trash2 size={16} />
-                  </button>
-                </div>
+            <section>
+              <div className="flex items-center gap-4 mb-6">
+                <h3 className="text-2xl font-bold text-akkfg-blue">News Management</h3>
+                <span className="bg-slate-100 text-slate-600 px-3 py-1 rounded-full text-xs font-bold">{news.length}</span>
               </div>
-            ))}
-            {news.length === 0 && (
-              <div className="col-span-full py-12 text-center bg-slate-50 rounded-3xl border-2 border-dashed border-slate-200 text-slate-400">
-                No news articles yet.
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {news.map((article: any) => (
+                  <div key={article.id} className="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm hover:shadow-md transition-all group">
+                    {article.image && <img src={article.image} alt={article.title} className="w-full h-40 object-cover rounded-2xl mb-4" />}
+                    <h4 className="text-lg font-bold text-akkfg-blue mb-2 group-hover:text-akkfg-orange transition-colors">{article.title}</h4>
+                    <p className="text-sm text-slate-500 mb-4 line-clamp-2">{article.summary}</p>
+                    <div className="flex items-center justify-between text-xs text-slate-400">
+                      <span>{new Date(article.date).toLocaleDateString()}</span>
+                      <button
+                        onClick={() => handleDeleteNews(article.id)}
+                        className="text-red-600 hover:text-red-700 font-bold"
+                      >
+                        <Trash2 size={16} />
+                      </button>
+                    </div>
+                  </div>
+                ))}
+                {news.length === 0 && (
+                  <div className="col-span-full py-12 text-center bg-slate-50 rounded-3xl border-2 border-dashed border-slate-200 text-slate-400">
+                    No news articles yet.
+                  </div>
+                )}
               </div>
-            )}
-          </div>
-        </section>
+            </section>
           </>
         )}
 
         {adminTab === 'photos' && (
           <>
-        <section>
-          <div className="flex items-center gap-4 mb-6">
-            <h3 className="text-2xl font-bold text-akkfg-blue">Photo Gallery</h3>
-            <span className="bg-slate-100 text-slate-600 px-3 py-1 rounded-full text-xs font-bold">{photos.length}</span>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            {photos.map((photo: any) => (
-              <div key={photo.id} className="relative group rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-all h-48 bg-slate-100">
-                <img src={photo.image} alt={photo.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform" />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end p-3">
-                  <div className="flex-1">
-                    <p className="text-white font-bold text-sm">{photo.title}</p>
-                    <p className="text-white/70 text-xs">{photo.category}</p>
+            <section>
+              <div className="flex items-center gap-4 mb-6">
+                <h3 className="text-2xl font-bold text-akkfg-blue">Photo Gallery</h3>
+                <span className="bg-slate-100 text-slate-600 px-3 py-1 rounded-full text-xs font-bold">{photos.length}</span>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                {photos.map((photo: any) => (
+                  <div key={photo.id} className="relative group rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-all h-48 bg-slate-100">
+                    <img src={photo.image} alt={photo.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end p-3">
+                      <div className="flex-1">
+                        <p className="text-white font-bold text-sm">{photo.title}</p>
+                        <p className="text-white/70 text-xs">{photo.category}</p>
+                      </div>
+                      <button
+                        onClick={() => handleDeletePhoto(photo.id)}
+                        className="bg-red-600 text-white p-2 rounded-lg hover:bg-red-700 transition-all"
+                      >
+                        <Trash2 size={16} />
+                      </button>
+                    </div>
                   </div>
-                  <button 
-                    onClick={() => handleDeletePhoto(photo.id)}
-                    className="bg-red-600 text-white p-2 rounded-lg hover:bg-red-700 transition-all"
-                  >
-                    <Trash2 size={16} />
-                  </button>
-                </div>
+                ))}
+                {photos.length === 0 && (
+                  <div className="col-span-full py-12 text-center bg-slate-50 rounded-3xl border-2 border-dashed border-slate-200 text-slate-400">
+                    No photos yet.
+                  </div>
+                )}
               </div>
-            ))}
-            {photos.length === 0 && (
-              <div className="col-span-full py-12 text-center bg-slate-50 rounded-3xl border-2 border-dashed border-slate-200 text-slate-400">
-                No photos yet.
-              </div>
-            )}
-          </div>
-        </section>
+            </section>
           </>
         )}
 
         {adminTab === 'videos' && (
           <>
-        <section>
-          <div className="flex items-center gap-4 mb-6">
-            <h3 className="text-2xl font-bold text-akkfg-blue">Video Management</h3>
-            <span className="bg-slate-100 text-slate-600 px-3 py-1 rounded-full text-xs font-bold">{videos.length}</span>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {videos.map((video: any) => (
-              <div key={video.id} className="relative group rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-all h-64 bg-slate-100">
-                <video
-                  src={video.url}
-                  className="w-full h-full object-cover"
-                  controls
-                  preload="metadata"
-                />
-                <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 p-4 flex items-center justify-between">
-                  <div>
-                    <p className="text-white font-bold">{video.title}</p>
-                    <a href={video.url} target="_blank" rel="noreferrer" className="text-akkfg-orange text-xs font-bold hover:underline">
-                      Open Video
-                    </a>
+            <section>
+              <div className="flex items-center gap-4 mb-6">
+                <h3 className="text-2xl font-bold text-akkfg-blue">Video Management</h3>
+                <span className="bg-slate-100 text-slate-600 px-3 py-1 rounded-full text-xs font-bold">{videos.length}</span>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {videos.map((video: any) => (
+                  <div key={video.id} className="relative group rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-all h-64 bg-slate-100">
+                    <video
+                      src={video.url}
+                      className="w-full h-full object-cover"
+                      controls
+                      preload="metadata"
+                    />
+                    <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 p-4 flex items-center justify-between">
+                      <div>
+                        <p className="text-white font-bold">{video.title}</p>
+                        <a href={video.url} target="_blank" rel="noreferrer" className="text-akkfg-orange text-xs font-bold hover:underline">
+                          Open Video
+                        </a>
+                      </div>
+                      <button
+                        onClick={() => handleDeleteVideo(video.id)}
+                        className="bg-red-600 text-white p-2 rounded-lg hover:bg-red-700 transition-all"
+                      >
+                        <Trash2 size={16} />
+                      </button>
+                    </div>
                   </div>
-                  <button 
-                    onClick={() => handleDeleteVideo(video.id)}
-                    className="bg-red-600 text-white p-2 rounded-lg hover:bg-red-700 transition-all"
-                  >
-                    <Trash2 size={16} />
-                  </button>
-                </div>
+                ))}
+                {videos.length === 0 && (
+                  <div className="col-span-full py-12 text-center bg-slate-50 rounded-3xl border-2 border-dashed border-slate-200 text-slate-400">
+                    No videos yet.
+                  </div>
+                )}
               </div>
-            ))}
-            {videos.length === 0 && (
-              <div className="col-span-full py-12 text-center bg-slate-50 rounded-3xl border-2 border-dashed border-slate-200 text-slate-400">
-                No videos yet.
-              </div>
-            )}
-          </div>
-        </section>
+            </section>
           </>
         )}
       </div>
@@ -2808,12 +2807,12 @@ export default function App() {
       fetch('/api/auth/me', {
         headers: { 'Authorization': `Bearer ${token}` }
       })
-      .then(res => res.ok ? res.json() : null)
-      .then(userData => {
-        if (userData) setUser(userData);
-        else localStorage.removeItem('akkfg_token');
-      })
-      .catch(() => localStorage.removeItem('akkfg_token'));
+        .then(res => res.ok ? res.json() : null)
+        .then(userData => {
+          if (userData) setUser(userData);
+          else localStorage.removeItem('akkfg_token');
+        })
+        .catch(() => localStorage.removeItem('akkfg_token'));
     }
   }, []);
 
@@ -2833,7 +2832,7 @@ export default function App() {
 
         const sessionUser = session.user;
         setIsAuthProcessing(true);
-        
+
         try {
           const res = await fetch('/api/auth/google', {
             method: 'POST',
@@ -2843,7 +2842,7 @@ export default function App() {
               name: sessionUser.user_metadata?.full_name || sessionUser.email?.split('@')[0] || 'Google User'
             })
           });
-          
+
           if (res.ok) {
             const data = await res.json();
             handleLogin(data.user, data.token);
@@ -2906,14 +2905,14 @@ export default function App() {
           <div className="w-16 h-16 border-4 border-akkfg-orange border-t-transparent rounded-full animate-spin"></div>
         </div>
       )}
-      <Navbar 
-        activeTab={activeTab} 
-        setActiveTab={setActiveTab} 
+      <Navbar
+        activeTab={activeTab}
+        setActiveTab={setActiveTab}
         user={user}
         onLogout={handleLogout}
         onOpenLogin={() => setIsLoginModalOpen(true)}
       />
-      
+
       <main className="flex-grow">
         <AnimatePresence mode="wait">
           <motion.div
@@ -2931,9 +2930,9 @@ export default function App() {
             {activeTab === 'downloads' && <Downloads />}
             {activeTab === 'contact' && <Contact />}
             {activeTab === 'dashboard' && user && (
-              <Dashboard 
-                user={user} 
-                onCompleteRegistration={() => setActiveTab('register')} 
+              <Dashboard
+                user={user}
+                onCompleteRegistration={() => setActiveTab('register')}
               />
             )}
             {activeTab === 'admin' && user?.role === 'Admin' && <AdminPanel />}
@@ -2941,9 +2940,9 @@ export default function App() {
         </AnimatePresence>
       </main>
 
-      <LoginModal 
-        isOpen={isLoginModalOpen} 
-        onClose={() => setIsLoginModalOpen(false)} 
+      <LoginModal
+        isOpen={isLoginModalOpen}
+        onClose={() => setIsLoginModalOpen(false)}
         onLogin={handleLogin}
       />
 
