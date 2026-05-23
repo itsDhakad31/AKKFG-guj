@@ -202,14 +202,50 @@ const findFreePort = (port: number): Promise<number> => {
 
 // Helper
 const generateUniqueID = async (role: string) => {
-  const prefix = role === 'Coach' ? 'AKKFG-C' : 'AKKFG-S';
-  const { data: countRes } = await supabase
+  const prefix = role === 'Coach' ? 'AKKFG-C' : role === 'Technical' ? 'AKKFG-T' : 'AKKFG-S';
+  
+  // Use robust query to fetch all unique_ids with prefix
+  const { data, error } = await supabaseAdmin
     .from('registrations')
-    .select('count', { count: 'exact', head: true })
-    .eq('unique_id::text', prefix + '-%');
-  const count = (countRes?.[0]?.count || 0) + 1;
+    .select('unique_id')
+    .like('unique_id', `${prefix}-%`);
+    
+  if (error || !data || data.length === 0) {
+    return `${prefix}-0001`;
+  }
+  
+  let maxNum = 0;
+  for (const row of data) {
+    if (row.unique_id) {
+      const parts = row.unique_id.split('-');
+      const numPart = Number(parts[2]);
+      if (!Number.isNaN(numPart) && numPart > maxNum) {
+        maxNum = numPart;
+      }
+    }
+  }
+  
+  const count = maxNum + 1;
   return `${prefix}-${count.toString().padStart(4, '0')}`;
 };
+
+const virtualizeRegistration = (reg: any) => {
+  if (!reg) return reg;
+  if (reg.experience && reg.experience.startsWith('[Technical] ')) {
+    return {
+      ...reg,
+      role: 'Technical',
+      experience: reg.experience.slice('[Technical] '.length)
+    };
+  }
+  return reg;
+};
+
+const virtualizeRegistrations = (regs: any[]) => {
+  if (!Array.isArray(regs)) return [];
+  return regs.map(virtualizeRegistration);
+};
+
 
 const getYearFromDateValue = (value: string | null | undefined) => {
   if (!value) return null;
@@ -236,26 +272,26 @@ app.get('/api/healthz', (req, res) => {
 app.get('/api/site-stats', async (req, res) => {
 
   const currentYear = new Date().getFullYear();
-  const [playersRes, coachesRes, districtsRes, eventsRes] = await Promise.all([
-    supabase.from('registrations').select('id', { count: 'exact', head: true }).eq('role', 'Student'),
-    supabase.from('registrations').select('id', { count: 'exact', head: true }).eq('role', 'Coach'),
-    supabase.from('registrations').select('address_city'),
-    supabase.from('events').select('date')
-  ]);
+    const [playersRes, coachesRes, citiesRes, eventsRes] = await Promise.all([
+      supabaseAdmin.from('registrations').select('id', { count: 'exact', head: true }).eq('role', 'Student'),
+      supabaseAdmin.from('registrations').select('id', { count: 'exact', head: true }).eq('role', 'Coach'),
+      supabaseAdmin.from('registrations').select('address_city'),
+      supabaseAdmin.from('events').select('date')
+    ]);
 
-  if (playersRes.error || coachesRes.error || districtsRes.error || eventsRes.error) {
+  if (playersRes.error || coachesRes.error || citiesRes.error || eventsRes.error) {
     return res.status(500).json({
       error:
         playersRes.error?.message ||
         coachesRes.error?.message ||
-        districtsRes.error?.message ||
+        citiesRes.error?.message ||
         eventsRes.error?.message ||
         'Failed to load site stats'
     });
   }
 
   const districtsCovered = new Set(
-    (districtsRes.data || [])
+    (citiesRes.data || [])
       .map((row) => row.address_city?.trim().toLowerCase())
       .filter(Boolean)
   ).size;
@@ -271,13 +307,13 @@ app.get('/api/site-stats', async (req, res) => {
 });
 
 app.get('/api/news', async (req, res) => {
-  const { data, error } = await supabase.from('news').select('*').order('date', { ascending: false });
+  const { data, error } = await supabaseAdmin.from('news').select('*').order('date', { ascending: false });
   if (error) return res.status(500).json({ error });
   res.json(data || []);
 });
 
 app.get('/api/events', async (req, res) => {
-  const { data, error } = await supabase.from('events').select('*').order('date', { ascending: true });
+  const { data, error } = await supabaseAdmin.from('events').select('*').order('date', { ascending: true });
   if (error) return res.status(500).json({ error });
   res.json(data || []);
 });
@@ -286,10 +322,10 @@ app.post('/api/auth/register', async (req, res) => {
   const { name, password, role } = req.body;
   const email = normalizeEmail(req.body.email || '');
   try {
-    const { data: existing } = await supabase.from('users').select('*').eq('email', email).single();
+    const { data: existing } = await supabaseAdmin.from('users').select('*').eq('email', email).single();
     if (existing) return res.status(400).json({ error: 'Email already exists' });
     const hashedPassword = await bcrypt.hash(password, 10);
-    const { data, error } = await supabase
+    const { data, error } = await supabaseAdmin
       .from('users')
       .insert({ name, email, password: hashedPassword, role: role || 'Player' })
       .select()
@@ -310,7 +346,7 @@ app.post('/api/auth/login', async (req, res) => {
   const { password } = req.body;
   try {
     if (email === DEFAULT_ADMIN_EMAIL && password === DEFAULT_ADMIN_PASSWORD) {
-      const { data: adminUser } = await supabase
+      const { data: adminUser } = await supabaseAdmin
         .from('users')
         .select('*')
         .ilike('email', email)
@@ -324,7 +360,7 @@ app.post('/api/auth/login', async (req, res) => {
       return res.json({ user: payload, token });
     }
 
-    const { data: user, error: queryError } = await supabase.from('users').select('*').ilike('email', email).maybeSingle();
+    const { data: user, error: queryError } = await supabaseAdmin.from('users').select('*').ilike('email', email).maybeSingle();
     if (queryError) {
       console.error('DB QUERY ERROR for email', email, ':', queryError);
       return res.status(500).json({ error: 'Database query failed', details: queryError.message });
@@ -350,6 +386,53 @@ app.post('/api/auth/login', async (req, res) => {
     res.status(500).json({ error: 'Login failed' });
   }
 });
+
+app.post('/api/auth/google', async (req, res) => {
+  const { email, name } = req.body;
+  const normalizedEmail = email?.trim().toLowerCase() || '';
+  try {
+    // 1. Check if user already exists
+    let { data: user, error: queryError } = await supabaseAdmin
+      .from('users')
+      .select('*')
+      .ilike('email', normalizedEmail)
+      .maybeSingle();
+
+    if (queryError) {
+      return res.status(500).json({ error: 'Database error', details: queryError.message });
+    }
+
+    // 2. If user doesn't exist, register them as Player
+    if (!user) {
+      const dummyPassword = await bcrypt.hash(Math.random().toString(36).slice(-8), 10);
+      const { data: newUser, error: insertError } = await supabaseAdmin
+        .from('users')
+        .insert({
+          name: name || 'Google User',
+          email: normalizedEmail,
+          password: dummyPassword,
+          role: 'Player'
+        })
+        .select()
+        .single();
+
+      if (insertError) {
+        return res.status(500).json({ error: 'Failed to create user', details: insertError.message });
+      }
+      user = newUser;
+    }
+
+    // 3. Generate custom JWT token
+    const payload = { id: user.id, name: user.name, email: user.email, role: user.role };
+    const token = jwt.sign(payload, JWT_SECRET);
+
+    res.json({ user: payload, token });
+  } catch (err: any) {
+    console.error('Google Auth backend error:', err);
+    res.status(500).json({ error: 'Google authentication failed' });
+  }
+});
+
 
 app.get('/api/auth/me', authMiddleware, (req, res) => {
   res.json((req as any).jwtPayload);
@@ -378,7 +461,13 @@ app.post('/api/register', upload.fields([
   { name: 'edu_qualification', maxCount: 1 },
   { name: 'referee_cert', maxCount: 1 }
 ]), async (req, res) => {
-  const data = req.body;
+  const data = { ...req.body };
+  const isTechnical = data.role === 'Technical';
+  if (isTechnical) {
+    data.role = 'Coach';
+    data.experience = `[Technical] ${data.experience || ''}`;
+  }
+  
   const urls: Record<string, string> = {};
   const multerFiles = req.files as { [fieldname: string]: Express.Multer.File[] } || {};
   const files = Object.values(multerFiles).flat();
@@ -406,24 +495,31 @@ app.post('/api/register', upload.fields([
   }
   
   Object.assign(data, urls);
+  const roleForId = isTechnical ? 'Technical' : req.body.role;
+  data.unique_id = await generateUniqueID(roleForId);
+
   const { data: result, error: insertError } = await supabaseAdmin.from('registrations').insert(data).select().single();
   if (insertError) return res.status(500).json({ error: insertError.message });
-  res.json({ success: true, id: result.id, urls });
+  res.json({ success: true, id: result.id, unique_id: result.unique_id, urls });
 });
 
 app.get('/api/registrations/me', authMiddleware, async (req, res) => {
   const payload = (req as any).jwtPayload;
-  const { data, error } = await supabase.from('registrations').select('*').eq('email', payload.email).limit(1).maybeSingle();
+  const { data, error } = await supabaseAdmin.from('registrations').select('*').eq('email', payload.email).limit(1).maybeSingle();
   if (error) return res.status(500).json({ error });
-  res.json(data);
+  if (!data) return res.json(null);
+
+  const signedData = await attachSignedDocumentUrls(data);
+  res.json(virtualizeRegistration(signedData));
 });
 
 app.get('/api/admin/registrations', authMiddleware, isAdminMiddleware, async (req, res) => {
-  const { data, error } = await supabase.from('registrations').select('*').order('created_at', { ascending: false });
+  const { data, error } = await supabaseAdmin.from('registrations').select('*').order('created_at', { ascending: false });
   if (error) return res.status(500).json({ error });
   const registrations = await Promise.all((data || []).map(attachSignedDocumentUrls));
-  res.json(registrations);
+  res.json(virtualizeRegistrations(registrations));
 });
+
 
 app.get('/api/admin/photos', authMiddleware, isAdminMiddleware, async (req, res) => {
   const { data, error } = await supabaseAdmin
@@ -623,69 +719,78 @@ app.get('/api/admin/documents/download', authMiddleware, isAdminMiddleware, asyn
 app.put('/api/admin/registrations/:id/status', authMiddleware, isAdminMiddleware, async (req, res) => {
   const id = req.params.id;
   const { status } = req.body;
-  const { data: reg } = await supabase.from('registrations').select('*').eq('id', id).single();
-  if (!reg) return res.status(404).json({ error: 'Registration not found' });
-  let unique_id = reg.unique_id;
-  if (status === 'Approved' && !unique_id) unique_id = await generateUniqueID(reg.role);
-  const { error } = await supabase.from('registrations').update({ status, unique_id }).eq('id', id);
+
+  const { data: reg } = await supabaseAdmin.from('registrations').select('*').eq('id', id).single();
+  const isTech = reg.experience && reg.experience.startsWith('[Technical] ');
+  const roleForId = isTech ? 'Technical' : reg.role;
+  const unique_id = status === 'Approved' && !reg.unique_id ? await generateUniqueID(roleForId) : reg.unique_id;
+
+  const { error } = await supabaseAdmin.from('registrations').update({ status, unique_id }).eq('id', id);
   if (error) return res.status(500).json({ error });
-  res.json({ success: true });
+
+  if (status === 'Approved' && reg && reg.email) {
+    const userRole = reg.role === 'Coach' ? 'Coach' : 'Player';
+    await supabaseAdmin.from('users').update({ role: userRole }).eq('email', reg.email);
+  }
+
+  res.json({ success: true, unique_id });
 });
 
 app.delete('/api/admin/registrations/:id', authMiddleware, isAdminMiddleware, async (req, res) => {
   const id = req.params.id;
-  const { error } = await supabase.from('registrations').delete().eq('id', id);
+  const { error } = await supabaseAdmin.from('registrations').delete().eq('id', id);
   if (error) return res.status(500).json({ error });
   res.json({ success: true });
 });
 
 app.post('/api/admin/events', authMiddleware, isAdminMiddleware, async (req, res) => {
   const { title, date, location, category, status } = req.body;
-  const { data, error } = await supabase.from('events').insert({ title, date, location, category, status: status || 'Upcoming' }).select().single();
+  const { data, error } = await supabaseAdmin.from('events').insert({ title, date, location, category, status: status || 'Upcoming' }).select().single();
   if (error) return res.status(500).json({ error });
-  res.json({ success: true, id: data.id });
+  res.json(data);
 });
 
 app.delete('/api/admin/events/:id', authMiddleware, isAdminMiddleware, async (req, res) => {
   const id = req.params.id;
-  const { error } = await supabase.from('events').delete().eq('id', id);
+  const { error } = await supabaseAdmin.from('events').delete().eq('id', id);
   if (error) return res.status(500).json({ error });
   res.json({ success: true });
 });
 
 app.get('/api/admin/news', authMiddleware, isAdminMiddleware, async (req, res) => {
-  const { data, error } = await supabase.from('news').select('*').order('created_at', { ascending: false });
+  const { data, error } = await supabaseAdmin.from('news').select('*').order('created_at', { ascending: false });
   if (error) return res.status(500).json({ error });
   res.json(data || []);
 });
 
 app.put('/api/admin/news/:id', authMiddleware, isAdminMiddleware, async (req, res) => {
   const id = req.params.id;
-  const updates = req.body;
-  const { data, error } = await supabase.from('news').update(updates).eq('id', id).select().single();
+  const { title, summary, date, image } = req.body;
+  const updates = { title, summary, date, image };
+  const { data, error } = await supabaseAdmin.from('news').update(updates).eq('id', id).select().single();
   if (error) return res.status(500).json({ error });
-  res.json({ success: true, news: data });
+  res.json(data);
 });
 
 app.post('/api/admin/news', authMiddleware, isAdminMiddleware, async (req, res) => {
   const { title, summary, date, image } = req.body;
-  const { data, error } = await supabase.from('news').insert({ title, summary, date, image }).select().single();
+  const { data, error } = await supabaseAdmin.from('news').insert({ title, summary, date, image }).select().single();
   if (error) return res.status(500).json({ error });
-  res.json({ success: true, id: data.id });
+  res.json(data);
 });
 
 app.delete('/api/admin/news/:id', authMiddleware, isAdminMiddleware, async (req, res) => {
   const id = req.params.id;
-  const { error } = await supabase.from('news').delete().eq('id', id);
+  const { error } = await supabaseAdmin.from('news').delete().eq('id', id);
   if (error) return res.status(500).json({ error });
   res.json({ success: true });
 });
 
 app.get('/api/admin/stats', authMiddleware, isAdminMiddleware, async (req, res) => {
   const [usersRes, regsRes, pendingRes] = await Promise.all([
-    supabase.from('users').select('id', { count: 'exact', head: true }),
-    supabase.from('registrations').select('id', { count: 'exact', head: true }),
-    supabase.from('registrations').select('id', { count: 'exact', head: true }).eq('status', 'Pending')
+    supabaseAdmin.from('users').select('id', { count: 'exact', head: true }),
+    supabaseAdmin.from('registrations').select('id', { count: 'exact', head: true }),
+    supabaseAdmin.from('registrations').select('id', { count: 'exact', head: true }).eq('status', 'Pending')
   ]);
   const users = usersRes.count ?? 0;
   const registrations = regsRes.count ?? 0;

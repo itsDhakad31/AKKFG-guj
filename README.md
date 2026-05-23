@@ -90,4 +90,28 @@ Set these environment variables in Render:
 - `DEFAULT_ADMIN_EMAIL`
 - `DEFAULT_ADMIN_PASSWORD`
 
+## Running with Docker
+
+You can run the entire application using Docker for a seamless local development experience with zero prerequisites other than Docker.
+
+### 1. Development Mode (with Live Reloading)
+To run the application in development mode with active file watching and hot-reloading (HMR):
+```bash
+docker-compose up
+```
+This automatically binds your local files into the container. When you make edits in `src/`, they will immediately hot-reload in your browser.
+
+- **Frontend & Backend:** http://localhost:3000
+
+### 2. Production Mode (Built Container)
+To build and run the application as a single optimized production container:
+```bash
+# Build the Docker image
+docker build -t akkfg-app .
+
+# Run the container
+docker run -p 3000:3000 --env-file .env akkfg-app
+```
+
 Enjoy managing Amateur Kho-Kho Federation Gujarat! 🥅🇮🇳
+

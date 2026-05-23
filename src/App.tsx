@@ -26,6 +26,7 @@ import {
   Image as ImageIcon
 } from 'lucide-react';
 import { NewsItem, EventItem, RegistrationData, SiteStats, User, RegistrationFormData } from './types';
+import { supabase } from './supabase';
 
 // --- Components ---
 
@@ -36,6 +37,24 @@ const LoginModal = ({ isOpen, onClose, onLogin }: { isOpen: boolean, onClose: ()
   const [name, setName] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+
+  const handleGoogleLogin = async () => {
+    setError('');
+    setLoading(true);
+    localStorage.removeItem('akkfg_logged_out');
+    try {
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: 'google',
+        options: {
+          redirectTo: window.location.origin
+        }
+      });
+      if (error) throw error;
+    } catch (err: any) {
+      setError(err.message || 'Google Authentication failed');
+      setLoading(false);
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -130,6 +149,42 @@ const LoginModal = ({ isOpen, onClose, onLogin }: { isOpen: boolean, onClose: ()
             {loading ? 'Processing...' : (isRegister ? 'Register' : 'Login')}
           </button>
 
+          <div className="relative my-6">
+            <div className="absolute inset-0 flex items-center">
+              <span className="w-full border-t border-slate-200" />
+            </div>
+            <div className="relative flex justify-center text-xs uppercase">
+              <span className="bg-white px-2 text-slate-500 font-medium">Or continue with</span>
+            </div>
+          </div>
+
+          <button
+            type="button"
+            onClick={handleGoogleLogin}
+            disabled={loading}
+            className="w-full flex items-center justify-center gap-3 bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 py-3.5 rounded-xl font-bold transition-all shadow-sm hover:shadow-md disabled:opacity-50"
+          >
+            <svg className="w-5 h-5" viewBox="0 0 24 24">
+              <path
+                fill="#4285F4"
+                d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
+              />
+              <path
+                fill="#34A853"
+                d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
+              />
+              <path
+                fill="#FBBC05"
+                d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"
+              />
+              <path
+                fill="#EA4335"
+                d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"
+              />
+            </svg>
+            Continue with Google
+          </button>
+
           <div className="text-center pt-4">
             <button 
               type="button"
@@ -173,9 +228,12 @@ const Navbar = ({ activeTab, setActiveTab, user, onLogout, onOpenLogin }: {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-20">
           <div className="flex items-center gap-3 cursor-pointer" onClick={() => setActiveTab('home')}>
-            <div className="w-12 h-12 bg-akkfg-orange rounded-full flex items-center justify-center text-white shadow-lg">
-              <Trophy size={24} />
-            </div>
+            <img 
+              src="https://files.catbox.moe/u0lznd.jpg" 
+              alt="AKKFG Logo" 
+              className="w-12 h-12 object-contain rounded-full shadow-lg border border-slate-100 bg-white p-0.5"
+              referrerPolicy="no-referrer"
+            />
             <div>
               <h1 className="text-lg font-bold text-akkfg-blue leading-tight">AKKFG</h1>
               <p className="text-[10px] uppercase tracking-widest text-slate-500 font-semibold">Gujarat Kho-Kho</p>
@@ -353,9 +411,12 @@ const Footer = () => (
       <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
         <div className="space-y-4">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-akkfg-orange rounded-full flex items-center justify-center text-white">
-              <Trophy size={20} />
-            </div>
+            <img 
+              src="https://files.catbox.moe/u0lznd.jpg" 
+              alt="AKKFG Logo" 
+              className="w-10 h-10 object-contain rounded-full bg-white p-0.5 border border-slate-700 shadow-sm"
+              referrerPolicy="no-referrer"
+            />
             <h2 className="text-xl font-bold text-white">AKKFG</h2>
           </div>
           <p className="text-sm leading-relaxed">
@@ -607,9 +668,6 @@ Reviving the Spirit of <span className="text-akkfg-orange">Kho-Kho</span> in Guj
                   <span className="px-3 py-1 bg-emerald-100 text-emerald-700 text-[10px] font-bold rounded-full uppercase tracking-wider">
                     {event.status}
                   </span>
-                  <button className="bg-akkfg-blue text-white px-6 py-2.5 rounded-full text-sm font-bold hover:bg-akkfg-blue/90 transition-all whitespace-nowrap">
-                    Register Team
-                  </button>
                 </div>
               </motion.div>
             ))}
@@ -693,12 +751,11 @@ const About = () => (
 
     <section>
       <h2 className="text-3xl text-akkfg-blue text-center mb-12">Office Bearers</h2>
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
         {[
-          { name: 'Shri Rajesh Patel', role: 'President', image: 'https://i.pravatar.cc/150?u=1' },
-          { name: 'Shri Amit Shah', role: 'General Secretary', image: 'https://i.pravatar.cc/150?u=2' },
-          { name: 'Smt. Meena Desai', role: 'Treasurer', image: 'https://i.pravatar.cc/150?u=3' },
-          { name: 'Shri Vijay Rathod', role: 'Vice President', image: 'https://i.pravatar.cc/150?u=4' },
+          { name: 'Akshay Malete', role: 'President', image: 'https://files.catbox.moe/vl5lw8.jpg' },
+          { name: 'Santosh Garud', role: 'General Secretary', image: 'https://files.catbox.moe/492grk.jpg' },
+          { name: 'Shaileshbhai Patel', role: 'Treasurer', image: 'https://files.catbox.moe/xphty6.jpg' },
         ].map((person, i) => (
           <div key={i} className="text-center">
             <div className="w-32 h-32 rounded-full overflow-hidden mx-auto mb-4 border-4 border-white shadow-lg">
@@ -715,10 +772,18 @@ const About = () => (
 
 const IDCard = ({ data }: { data: RegistrationData }) => (
   <div className="w-full max-w-sm mx-auto bg-white rounded-2xl shadow-2xl overflow-hidden border-2 border-akkfg-blue relative">
-    <div className="bg-akkfg-blue p-4 text-white text-center relative overflow-hidden">
+    <div className="bg-akkfg-blue p-4 text-white flex items-center justify-center gap-3 relative overflow-hidden">
       <div className="absolute top-0 right-0 w-20 h-20 bg-akkfg-orange rotate-45 translate-x-10 -translate-y-10" />
-      <h3 className="text-lg font-bold">AKKFG</h3>
-      <p className="text-[10px] uppercase tracking-widest opacity-80">Gujarat Kho-Kho Federation</p>
+      <img 
+        src="https://files.catbox.moe/u0lznd.jpg" 
+        alt="AKKFG Logo" 
+        className="w-10 h-10 object-contain rounded-full bg-white p-0.5 relative z-10"
+        referrerPolicy="no-referrer"
+      />
+      <div className="text-left relative z-10">
+        <h3 className="text-lg font-bold leading-tight">AKKFG</h3>
+        <p className="text-[9px] uppercase tracking-widest opacity-80 font-semibold">Gujarat Kho-Kho Federation</p>
+      </div>
     </div>
     
     <div className="p-6 flex flex-col items-center">
@@ -730,10 +795,31 @@ const IDCard = ({ data }: { data: RegistrationData }) => (
         />
       </div>
       
-      <div className="text-center space-y-1 mb-6">
+      <div className="text-center space-y-1.5 mb-6 w-full">
         <h4 className="text-xl font-bold text-akkfg-blue uppercase">{data.name}</h4>
-        <p className="text-akkfg-orange font-bold text-sm tracking-widest uppercase">{data.role === 'Student' ? 'Player' : data.role}</p>
-        <p className="text-xs font-mono bg-slate-100 px-3 py-1 rounded-full text-slate-600">{data.unique_id}</p>
+        <p className="text-akkfg-orange font-bold text-sm tracking-widest uppercase mb-2">
+          {data.role === 'Student' ? 'Player' : data.role === 'Technical' ? 'Technical Team' : data.role}
+        </p>
+        
+        {/* Generated 3 IDs */}
+        <div className="bg-slate-50 border border-slate-100 rounded-xl p-3 space-y-2 text-[11px] font-mono text-left max-w-[280px] mx-auto shadow-inner">
+          <div className="flex justify-between items-center">
+            <span className="text-slate-400 font-sans font-bold">AKKFG ID:</span>
+            <span className="font-bold text-akkfg-blue">{data.unique_id || 'Pending'}</span>
+          </div>
+          <div className="flex justify-between items-center border-t border-slate-100 pt-1.5">
+            <span className="text-slate-400 font-sans font-bold">KKFI ID:</span>
+            <span className="font-bold text-akkfg-blue">
+              {data.unique_id ? data.unique_id.replace('AKKFG', 'KKFI') : 'Pending'}
+            </span>
+          </div>
+          <div className="flex justify-between items-center border-t border-slate-100 pt-1.5">
+            <span className="text-slate-400 font-sans font-bold">NSRS ID:</span>
+            <span className="font-bold text-akkfg-blue">
+              {data.unique_id ? data.unique_id.replace('AKKFG', 'NSRS') : 'Pending'}
+            </span>
+          </div>
+        </div>
       </div>
       
       <div className="w-full grid grid-cols-2 gap-4 text-[10px] border-t border-slate-100 pt-4">
@@ -769,10 +855,10 @@ const Registration = ({ setActiveTab }: { setActiveTab: (tab: string) => void })
     mobile: '',
     experience: '',
     role: 'Student',
-    doc_photo: '',
-    doc_aadhar: '',
-    doc_pan: '',
-    doc_birth: '',
+    doc_photo: null,
+    doc_aadhar: null,
+    doc_pan: null,
+    doc_birth: null,
     level_passing: '',
     year_passing: '',
     coaching_cert: '',
@@ -799,6 +885,39 @@ const Registration = ({ setActiveTab }: { setActiveTab: (tab: string) => void })
       alert("Please accept the terms and conditions");
       return;
     }
+
+    // Validate Mobile
+    const mobileRegex = /^[0-9]{10}$/;
+    if (!mobileRegex.test(formData.mobile)) {
+      alert("Please enter a valid 10-digit mobile number");
+      return;
+    }
+
+    // Validate Email
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(formData.email)) {
+      alert("Please enter a valid email address");
+      return;
+    }
+
+    // Validate Files are uploaded
+    if (!formData.doc_photo) {
+      alert("Please upload a photograph");
+      return;
+    }
+    if (!formData.doc_aadhar) {
+      alert("Please upload Aadhar Card");
+      return;
+    }
+    if (!formData.doc_pan) {
+      alert("Please upload PAN Card");
+      return;
+    }
+    if (!formData.doc_birth) {
+      alert("Please upload Birth Certificate");
+      return;
+    }
+
     const formDataToSend = new FormData();
     Object.keys(formData).forEach(key => {
       const value = (formData as any)[key];
@@ -823,7 +942,7 @@ const Registration = ({ setActiveTab }: { setActiveTab: (tab: string) => void })
           doc_aadhar: (formData.doc_aadhar as File)?.name || '',
           doc_pan: (formData.doc_pan as File)?.name || '',
           doc_birth: (formData.doc_birth as File)?.name || '',
-          unique_id: data.id
+          unique_id: data.unique_id || data.id
         };
         setResult(resultData);
         setSubmitted(true);
@@ -873,19 +992,58 @@ const Registration = ({ setActiveTab }: { setActiveTab: (tab: string) => void })
   return (
     <div className="max-w-5xl mx-auto py-20 px-4">
       <div className="bg-white rounded-3xl shadow-xl overflow-hidden border border-slate-200">
-        <div className="bg-akkfg-blue p-8 text-white">
-          <h2 className="text-3xl mb-2">Federation Registration</h2>
-          <p className="text-white/70">Official registration for Coaches and Students of AKKFG.</p>
+        <div className="bg-akkfg-blue p-8 text-white flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+          <div>
+            <h2 className="text-3xl mb-2">Federation Registration</h2>
+            <p className="text-white/70">Official registration for Coaches, Students and Technical Teams of AKKFG.</p>
+          </div>
+          <button
+            type="button"
+            onClick={async () => {
+              try {
+                localStorage.removeItem('akkfg_logged_out');
+                await supabase.auth.signInWithOAuth({
+                  provider: 'google',
+                  options: {
+                    redirectTo: window.location.origin
+                  }
+                });
+              } catch (err) {
+                alert('Google Sign up failed');
+              }
+            }}
+            className="flex items-center gap-3 bg-white hover:bg-slate-50 text-slate-700 py-3 px-6 rounded-xl font-bold transition-all shadow-md shrink-0 self-start md:self-auto"
+          >
+            <svg className="w-5 h-5" viewBox="0 0 24 24">
+              <path
+                fill="#4285F4"
+                d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
+              />
+              <path
+                fill="#34A853"
+                d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
+              />
+              <path
+                fill="#FBBC05"
+                d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"
+              />
+              <path
+                fill="#EA4335"
+                d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"
+              />
+            </svg>
+            Sign up with Google
+          </button>
         </div>
         
         <div className="flex border-b border-slate-100">
-          {['Student', 'Coach'].map(role => (
+          {['Student', 'Coach', 'Technical'].map(role => (
             <button
               key={role}
               onClick={() => setFormData({...formData, role: role as any})}
               className={`flex-1 py-6 font-bold text-lg transition-all ${formData.role === role ? 'text-akkfg-orange bg-akkfg-orange/5 border-b-2 border-akkfg-orange' : 'text-slate-400 hover:text-slate-600'}`}
             >
-              {role === 'Student' ? 'Player' : role} Registration
+              {role === 'Student' ? 'Player' : role === 'Technical' ? 'Technical Team' : role} Registration
             </button>
           ))}
         </div>
@@ -1057,9 +1215,6 @@ const Events = () => {
               </div>
             </div>
             <div className="flex flex-col gap-3 w-full md:w-auto">
-              <button className="bg-akkfg-blue text-white px-8 py-3 rounded-full font-bold hover:bg-akkfg-blue/90 transition-all">
-                Register Now
-              </button>
               <button className="text-akkfg-blue font-bold text-sm hover:underline">
                 View Details
               </button>
@@ -1239,72 +1394,184 @@ const Downloads = () => (
   </div>
 );
 
-const Contact = () => (
-  <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-16">
-      <div>
-        <h2 className="text-4xl text-akkfg-blue mb-6">Get in Touch</h2>
-        <p className="text-slate-500 mb-10">Have questions about registrations or upcoming events? Our team is here to help you.</p>
-        
-        <div className="space-y-8">
-          <div className="flex gap-6">
-            <div className="w-12 h-12 bg-akkfg-orange/10 rounded-xl flex items-center justify-center text-akkfg-orange shrink-0">
-              <MapPin size={24} />
+const Contact = () => {
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [email, setEmail] = useState('');
+  const [message, setMessage] = useState('');
+  const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
+  const [errorMessage, setErrorMessage] = useState('');
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!firstName || !lastName || !email || !message) {
+      setStatus('error');
+      setErrorMessage('All fields are required.');
+      return;
+    }
+    
+    // Validate Email
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      setStatus('error');
+      setErrorMessage('Please enter a valid email address.');
+      return;
+    }
+
+    setStatus('loading');
+    try {
+      const response = await fetch('https://formspree.io/f/mqkoqpgj', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        },
+        body: JSON.stringify({
+          name: `${firstName} ${lastName}`,
+          email,
+          message,
+        }),
+      });
+
+      if (response.ok) {
+        setStatus('success');
+        setFirstName('');
+        setLastName('');
+        setEmail('');
+        setMessage('');
+      } else {
+        const data = await response.json();
+        setStatus('error');
+        setErrorMessage(data.error || 'Failed to send message. Please try again.');
+      }
+    } catch (error) {
+      setStatus('error');
+      setErrorMessage('Network error. Please try again.');
+    }
+  };
+
+  return (
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-16">
+        <div>
+          <h2 className="text-4xl text-akkfg-blue mb-6">Get in Touch</h2>
+          <p className="text-slate-500 mb-10">Have questions about registrations or upcoming events? Our team is here to help you.</p>
+          
+          <div className="space-y-8">
+            <div className="flex gap-6">
+              <div className="w-12 h-12 bg-akkfg-orange/10 rounded-xl flex items-center justify-center text-akkfg-orange shrink-0">
+                <MapPin size={24} />
+              </div>
+              <div>
+                <h4 className="font-bold text-akkfg-blue mb-1">Office Address</h4>
+                <p className="text-slate-600">Sports Complex, Stadium Road, Ahmedabad, Gujarat 380009</p>
+              </div>
             </div>
-            <div>
-              <h4 className="font-bold text-akkfg-blue mb-1">Office Address</h4>
-              <p className="text-slate-600">Sports Complex, Stadium Road, Ahmedabad, Gujarat 380009</p>
+            <div className="flex gap-6">
+              <div className="w-12 h-12 bg-akkfg-blue/10 rounded-xl flex items-center justify-center text-akkfg-blue shrink-0">
+                <Phone size={24} />
+              </div>
+              <div>
+                <h4 className="font-bold text-akkfg-blue mb-1">Phone Number</h4>
+                <p className="text-slate-600">+91 79 1234 5678</p>
+              </div>
             </div>
-          </div>
-          <div className="flex gap-6">
-            <div className="w-12 h-12 bg-akkfg-blue/10 rounded-xl flex items-center justify-center text-akkfg-blue shrink-0">
-              <Phone size={24} />
-            </div>
-            <div>
-              <h4 className="font-bold text-akkfg-blue mb-1">Phone Number</h4>
-              <p className="text-slate-600">+91 79 1234 5678</p>
-            </div>
-          </div>
-          <div className="flex gap-6">
-            <div className="w-12 h-12 bg-emerald-100 rounded-xl flex items-center justify-center text-emerald-600 shrink-0">
-              <Mail size={24} />
-            </div>
-            <div>
-              <h4 className="font-bold text-akkfg-blue mb-1">Email Address</h4>
-              <p className="text-slate-600">info@akkfgujarat.in</p>
+            <div className="flex gap-6">
+              <div className="w-12 h-12 bg-emerald-100 rounded-xl flex items-center justify-center text-emerald-600 shrink-0">
+                <Mail size={24} />
+              </div>
+              <div>
+                <h4 className="font-bold text-akkfg-blue mb-1">Email Address</h4>
+                <p className="text-slate-600">info@akkfgujarat.in</p>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-      
-      <div className="bg-white p-10 rounded-3xl shadow-xl border border-slate-200">
-        <form className="space-y-6">
-          <div className="grid grid-cols-2 gap-6">
-            <div className="space-y-2">
-              <label className="text-sm font-bold text-slate-700">First Name</label>
-              <input type="text" className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-akkfg-orange" />
+        
+        <div className="bg-white p-10 rounded-3xl shadow-xl border border-slate-200 relative overflow-hidden">
+          {status === 'success' && (
+            <div className="mb-6 p-4 bg-emerald-50 text-emerald-700 rounded-2xl border border-emerald-100 flex items-center gap-3 animate-pulse">
+              <ShieldCheck size={20} className="shrink-0" />
+              <div>
+                <p className="font-bold">Message Sent!</p>
+                <p className="text-xs text-emerald-600">Thank you for reaching out. We will get back to you shortly.</p>
+              </div>
+            </div>
+          )}
+
+          {status === 'error' && (
+            <div className="mb-6 p-4 bg-red-50 text-red-700 rounded-2xl border border-red-100 flex items-center gap-3">
+              <Info size={20} className="shrink-0" />
+              <div>
+                <p className="font-bold">Submission Error</p>
+                <p className="text-xs text-red-600">{errorMessage}</p>
+              </div>
+            </div>
+          )}
+
+          <form onSubmit={handleSubmit} className="space-y-6">
+            <div className="grid grid-cols-2 gap-6">
+              <div className="space-y-2">
+                <label className="text-sm font-bold text-slate-700">First Name</label>
+                <input 
+                  required 
+                  type="text" 
+                  value={firstName} 
+                  onChange={e => setFirstName(e.target.value)} 
+                  className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-akkfg-orange" 
+                />
+              </div>
+              <div className="space-y-2">
+                <label className="text-sm font-bold text-slate-700">Last Name</label>
+                <input 
+                  required 
+                  type="text" 
+                  value={lastName} 
+                  onChange={e => setLastName(e.target.value)} 
+                  className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-akkfg-orange" 
+                />
+              </div>
             </div>
             <div className="space-y-2">
-              <label className="text-sm font-bold text-slate-700">Last Name</label>
-              <input type="text" className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-akkfg-orange" />
+              <label className="text-sm font-bold text-slate-700">Email Address</label>
+              <input 
+                required 
+                type="email" 
+                value={email} 
+                onChange={e => setEmail(e.target.value)} 
+                className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-akkfg-orange" 
+              />
             </div>
-          </div>
-          <div className="space-y-2">
-            <label className="text-sm font-bold text-slate-700">Email Address</label>
-            <input type="email" className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-akkfg-orange" />
-          </div>
-          <div className="space-y-2">
-            <label className="text-sm font-bold text-slate-700">Message</label>
-            <textarea rows={4} className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-akkfg-orange resize-none"></textarea>
-          </div>
-          <button className="w-full bg-akkfg-blue text-white py-4 rounded-xl font-bold text-lg shadow-lg hover:bg-akkfg-blue/90 transition-all">
-            Send Message
-          </button>
-        </form>
+            <div className="space-y-2">
+              <label className="text-sm font-bold text-slate-700">Message</label>
+              <textarea 
+                required 
+                rows={4} 
+                value={message} 
+                onChange={e => setMessage(e.target.value)} 
+                className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-akkfg-orange resize-none"
+              ></textarea>
+            </div>
+            <button 
+              disabled={status === 'loading'}
+              className="w-full bg-akkfg-blue text-white py-4 rounded-xl font-bold text-lg shadow-lg hover:bg-akkfg-blue/90 transition-all disabled:opacity-50 flex items-center justify-center gap-2"
+            >
+              {status === 'loading' ? (
+                <>
+                  <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                  </svg>
+                  Sending Message...
+                </>
+              ) : 'Send Message'}
+            </button>
+          </form>
+        </div>
       </div>
     </div>
-  </div>
-);
+  );
+};
 
 const Dashboard = ({ user, onCompleteRegistration }: { user: User, onCompleteRegistration: () => void }) => {
   const [registration, setRegistration] = useState<RegistrationData | null>(null);
@@ -1347,10 +1614,14 @@ const Dashboard = ({ user, onCompleteRegistration }: { user: User, onCompleteReg
                 <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">Email</p>
                 <p className="font-bold text-slate-700 break-words">{user.email}</p>
               </div>
-              <div>
-                <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">Account Role</p>
-                <p className="font-bold text-akkfg-orange">{user.role}</p>
-              </div>
+              {registration && (
+                <div>
+                  <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">Account Role</p>
+                  <p className="font-bold text-akkfg-orange">
+                    {registration.role === 'Student' ? 'Player' : registration.role === 'Technical' ? 'Technical Team' : registration.role}
+                  </p>
+                </div>
+              )}
             </div>
           </div>
 
@@ -1367,14 +1638,10 @@ const Dashboard = ({ user, onCompleteRegistration }: { user: User, onCompleteReg
                     {registration.status}
                   </span>
                 </div>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 text-sm">
-                  <div className="p-4 bg-slate-50 rounded-xl">
-                    <p className="text-xs font-bold text-slate-400 uppercase mb-1">Unique ID</p>
-                    <p className="font-mono font-bold text-akkfg-blue break-all">{registration.unique_id}</p>
-                  </div>
+                <div className="grid grid-cols-1 gap-6 text-sm">
                   <div className="p-4 bg-slate-50 rounded-xl">
                     <p className="text-xs font-bold text-slate-400 uppercase mb-1">Registered Role</p>
-                    <p className="font-bold text-akkfg-blue">{registration.role === 'Student' ? 'Player' : registration.role}</p>
+                    <p className="font-bold text-akkfg-blue">{registration.role === 'Student' ? 'Player' : registration.role === 'Technical' ? 'Technical Team' : registration.role}</p>
                   </div>
                 </div>
               </div>
@@ -2057,9 +2324,23 @@ const AdminPanel = () => {
             className="bg-white rounded-3xl p-4 sm:p-8 max-w-4xl w-full shadow-2xl max-h-[90vh] overflow-y-auto"
           >
             <div className="flex items-start justify-between gap-4 mb-6 sticky top-0 bg-white pb-4 border-b border-slate-100">
-              <div className="min-w-0">
+              <div className="min-w-0 w-full">
                 <h3 className="text-xl sm:text-2xl font-bold text-akkfg-blue break-words">{selectedPlayer.name}</h3>
-                <p className="text-slate-500 font-mono text-sm break-all">{selectedPlayer.unique_id || 'Pending Approval'}</p>
+                <div className="flex flex-wrap gap-x-4 gap-y-1.5 text-slate-500 font-mono text-xs mt-1.5">
+                  <div>
+                    <span className="font-bold text-slate-400 font-sans">AKKFG:</span> {selectedPlayer.unique_id || 'Pending'}
+                  </div>
+                  {selectedPlayer.unique_id && (
+                    <>
+                      <div>
+                        <span className="font-bold text-slate-400 font-sans">KKFI:</span> {selectedPlayer.unique_id.replace('AKKFG', 'KKFI')}
+                      </div>
+                      <div>
+                        <span className="font-bold text-slate-400 font-sans">NSRS:</span> {selectedPlayer.unique_id.replace('AKKFG', 'NSRS')}
+                      </div>
+                    </>
+                  )}
+                </div>
               </div>
               <button onClick={() => setSelectedPlayer(null)} className="text-slate-400 hover:text-slate-600 shrink-0">
                 <X size={24} />
@@ -2234,8 +2515,8 @@ const AdminPanel = () => {
                       <p className="font-bold text-akkfg-blue break-words">{reg.name}</p>
                       <p className="text-[10px] font-mono text-slate-400 break-all">{reg.unique_id || 'Pending Approval'}</p>
                     </div>
-                    <span className={`shrink-0 px-2 py-1 rounded-md text-[10px] font-bold uppercase ${reg.role === 'Coach' ? 'bg-purple-100 text-purple-700' : 'bg-blue-100 text-blue-700'}`}>
-                      {reg.role === 'Student' ? 'Player' : reg.role}
+                    <span className={`shrink-0 px-2 py-1 rounded-md text-[10px] font-bold uppercase ${reg.role === 'Coach' ? 'bg-purple-100 text-purple-700' : reg.role === 'Technical' ? 'bg-amber-100 text-amber-700' : 'bg-blue-100 text-blue-700'}`}>
+                      {reg.role === 'Student' ? 'Player' : reg.role === 'Technical' ? 'Technical Team' : reg.role}
                     </span>
                   </div>
                   <div className="flex items-center justify-between gap-3 text-sm">
@@ -2297,8 +2578,8 @@ const AdminPanel = () => {
                         <p className="text-[10px] font-mono text-slate-400">{reg.unique_id}</p>
                       </td>
                       <td className="px-6 py-4">
-                        <span className={`px-2 py-1 rounded-md text-[10px] font-bold uppercase ${reg.role === 'Coach' ? 'bg-purple-100 text-purple-700' : 'bg-blue-100 text-blue-700'}`}>
-                          {reg.role === 'Student' ? 'Player' : reg.role}
+                        <span className={`px-2 py-1 rounded-md text-[10px] font-bold uppercase ${reg.role === 'Coach' ? 'bg-purple-100 text-purple-700' : reg.role === 'Technical' ? 'bg-amber-100 text-amber-700' : 'bg-blue-100 text-blue-700'}`}>
+                          {reg.role === 'Student' ? 'Player' : reg.role === 'Technical' ? 'Technical Team' : reg.role}
                         </span>
                       </td>
                       <td className="px-6 py-4 text-sm text-slate-600">{reg.address_city}</td>
@@ -2519,6 +2800,7 @@ export default function App() {
   const [activeTab, setActiveTab] = useState('home');
   const [user, setUser] = useState<User | null>(null);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
+  const [isAuthProcessing, setIsAuthProcessing] = useState(false);
 
   useEffect(() => {
     const token = localStorage.getItem('akkfg_token');
@@ -2535,14 +2817,81 @@ export default function App() {
     }
   }, []);
 
+  useEffect(() => {
+    // Listen for auth state changes from Supabase (Google Login)
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
+      if (event === 'SIGNED_IN' && session?.user) {
+        // If the user explicitly logged out, bypass and silent-signout Supabase to clear any persistent cookies
+        if (localStorage.getItem('akkfg_logged_out') === 'true') {
+          try {
+            await supabase.auth.signOut();
+          } catch (err) {
+            console.error('Error signing out:', err);
+          }
+          return;
+        }
+
+        const sessionUser = session.user;
+        setIsAuthProcessing(true);
+        
+        try {
+          const res = await fetch('/api/auth/google', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              email: sessionUser.email,
+              name: sessionUser.user_metadata?.full_name || sessionUser.email?.split('@')[0] || 'Google User'
+            })
+          });
+          
+          if (res.ok) {
+            const data = await res.json();
+            handleLogin(data.user, data.token);
+            setIsLoginModalOpen(false);
+          } else {
+            const errData = await res.json().catch(() => ({}));
+            console.error('Google backend auth bridge failed:', errData);
+            alert(errData.error || 'Google authentication bridge failed.');
+          }
+        } catch (err: any) {
+          console.error('Google auth bridge error:', err);
+          alert(err.message || 'An error occurred during Google authentication.');
+        } finally {
+          setIsAuthProcessing(false);
+          try {
+            // Immediately sign out from Supabase client to avoid state collision
+            await supabase.auth.signOut();
+          } catch (signOutErr) {
+            console.error('Error during Supabase signout:', signOutErr);
+          }
+          // Clear hash from URL to keep it clean and prevent redirect loop
+          if (window.location.hash) {
+            window.history.replaceState(null, '', window.location.pathname);
+          }
+        }
+      }
+    });
+
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, []);
+
   const handleLogin = (userData: User, token: string) => {
     setUser(userData);
     localStorage.setItem('akkfg_token', token);
+    localStorage.removeItem('akkfg_logged_out');
   };
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
     setUser(null);
     localStorage.removeItem('akkfg_token');
+    localStorage.setItem('akkfg_logged_out', 'true');
+    try {
+      await supabase.auth.signOut();
+    } catch (err) {
+      console.error('Error signing out from Supabase:', err);
+    }
     setActiveTab('home');
   };
 
@@ -2552,6 +2901,11 @@ export default function App() {
 
   return (
     <div className="min-h-screen flex flex-col">
+      {isAuthProcessing && (
+        <div className="fixed inset-0 z-[200] flex items-center justify-center bg-slate-900/80 backdrop-blur-md">
+          <div className="w-16 h-16 border-4 border-akkfg-orange border-t-transparent rounded-full animate-spin"></div>
+        </div>
+      )}
       <Navbar 
         activeTab={activeTab} 
         setActiveTab={setActiveTab} 

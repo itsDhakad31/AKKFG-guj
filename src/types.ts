@@ -44,7 +44,7 @@ export interface RegistrationData {
   email: string;
   mobile: string;
   experience: string;
-  role: 'Coach' | 'Student';
+  role: 'Coach' | 'Student' | 'Technical';
   status?: string;
   // Docs - backend URLs
   doc_photo?: string;
