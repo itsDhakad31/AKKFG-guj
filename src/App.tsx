@@ -773,12 +773,18 @@ const About = () => (
   </div>
 );
 
+const getProxiedImageUrl = (url?: string | null) => {
+  if (!url) return '';
+  if (url.startsWith('data:') || url.startsWith('blob:')) return url;
+  return `/api/proxy-image?url=${encodeURIComponent(url)}`;
+};
+
 const IDCard = ({ data }: { data: RegistrationData }) => (
   <div id="akkfg-id-card-render" className="w-full max-w-sm mx-auto bg-white rounded-2xl shadow-2xl overflow-hidden border-2 border-akkfg-blue relative">
     <div className="bg-akkfg-blue p-4 text-white flex items-center justify-center gap-3 relative overflow-hidden">
       <div className="absolute top-0 right-0 w-20 h-20 bg-akkfg-orange rotate-45 translate-x-10 -translate-y-10" />
       <img
-        src={`/api/proxy-image?url=${encodeURIComponent("https://files.catbox.moe/u0lznd.jpg")}`}
+        src={getProxiedImageUrl("https://files.catbox.moe/u0lznd.jpg")}
         alt="AKKFG Logo"
         className="w-10 h-10 object-contain rounded-full bg-white p-0.5 relative z-10"
         referrerPolicy="no-referrer"
@@ -793,7 +799,7 @@ const IDCard = ({ data }: { data: RegistrationData }) => (
     <div className="p-6 flex flex-col items-center">
       <div className="w-32 h-32 bg-slate-100 rounded-xl border-4 border-white shadow-md overflow-hidden mb-4">
         <img
-          src={data.doc_photo ? `/api/proxy-image?url=${encodeURIComponent(data.doc_photo)}` : `https://i.pravatar.cc/150?u=${data.name}`}
+          src={getProxiedImageUrl(data.doc_photo) || `https://i.pravatar.cc/150?u=${data.name}`}
           className="w-full h-full object-cover"
           referrerPolicy="no-referrer"
           crossOrigin="anonymous"
@@ -1673,9 +1679,9 @@ const Dashboard = ({ user, onCompleteRegistration }: { user: User, onCompleteReg
       const imgData = canvas.toDataURL('image/png');
       pdf.addImage(imgData, 'PNG', 0, 0, widthMm, heightMm);
       pdf.save(`AKKFG_ID_Card_${reg.unique_id || 'Player'}.pdf`);
-    } catch (err) {
+    } catch (err: any) {
       console.error('Error exporting ID card as PDF:', err);
-      alert('Unable to export ID card. Please try again.');
+      alert(`Unable to export ID card. Error Details: ${err?.message || err}`);
     } finally {
       setIsDownloading(false);
     }
