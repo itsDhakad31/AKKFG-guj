@@ -810,7 +810,7 @@ if (process.env.NODE_ENV !== 'production') {
     const wsPort = await findFreePort(requestedWsPort);
     const vite = await createViteServer({
       server: { middlewareMode: true, hmr: { port: wsPort } },
-      appType: 'custom',
+      appType: 'spa',
     });
     if (wsPort !== requestedWsPort) {
       console.log(`Vite HMR WebSocket port ${requestedWsPort} was busy, switched to ${wsPort}`);
