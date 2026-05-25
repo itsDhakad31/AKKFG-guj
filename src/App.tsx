@@ -29,6 +29,7 @@ import {
 import { NewsItem, EventItem, RegistrationData, SiteStats, User, RegistrationFormData } from './types';
 import { supabase } from './supabase';
 import html2canvas from 'html2canvas';
+import { jsPDF } from 'jspdf';
 
 // --- Components ---
 
@@ -777,7 +778,7 @@ const IDCard = ({ data }: { data: RegistrationData }) => (
     <div className="bg-akkfg-blue p-4 text-white flex items-center justify-center gap-3 relative overflow-hidden">
       <div className="absolute top-0 right-0 w-20 h-20 bg-akkfg-orange rotate-45 translate-x-10 -translate-y-10" />
       <img
-        src="https://files.catbox.moe/u0lznd.jpg"
+        src={`/api/proxy-image?url=${encodeURIComponent("https://files.catbox.moe/u0lznd.jpg")}`}
         alt="AKKFG Logo"
         className="w-10 h-10 object-contain rounded-full bg-white p-0.5 relative z-10"
         referrerPolicy="no-referrer"
@@ -792,7 +793,7 @@ const IDCard = ({ data }: { data: RegistrationData }) => (
     <div className="p-6 flex flex-col items-center">
       <div className="w-32 h-32 bg-slate-100 rounded-xl border-4 border-white shadow-md overflow-hidden mb-4">
         <img
-          src={data.doc_photo || `https://i.pravatar.cc/150?u=${data.name}`}
+          src={data.doc_photo ? `/api/proxy-image?url=${encodeURIComponent(data.doc_photo)}` : `https://i.pravatar.cc/150?u=${data.name}`}
           className="w-full h-full object-cover"
           referrerPolicy="no-referrer"
           crossOrigin="anonymous"
@@ -1645,7 +1646,7 @@ const Dashboard = ({ user, onCompleteRegistration }: { user: User, onCompleteReg
   const [loading, setLoading] = useState(true);
   const [isDownloading, setIsDownloading] = useState(false);
 
-  const handleDownloadPNG = async (reg: RegistrationData) => {
+  const handleDownloadPDF = async (reg: RegistrationData) => {
     const cardElement = document.getElementById('akkfg-id-card-render');
     if (!cardElement) return;
 
@@ -1658,17 +1659,22 @@ const Dashboard = ({ user, onCompleteRegistration }: { user: User, onCompleteReg
         logging: false
       });
 
-      const dataUrl = canvas.toDataURL('image/png');
-      const link = document.createElement('a');
-      const filename = `AKKFG_ID_Card_${reg.unique_id || 'Player'}.png`;
+      const imgWidth = canvas.width;
+      const imgHeight = canvas.height;
+      const widthMm = 85.6; // credit card standard width in mm
+      const heightMm = (imgHeight / imgWidth) * widthMm;
 
-      link.href = dataUrl;
-      link.download = filename;
-      document.body.appendChild(link);
-      link.click();
-      link.remove();
+      const pdf = new jsPDF({
+        orientation: heightMm > widthMm ? 'portrait' : 'landscape',
+        unit: 'mm',
+        format: [widthMm, heightMm]
+      });
+
+      const imgData = canvas.toDataURL('image/png');
+      pdf.addImage(imgData, 'PNG', 0, 0, widthMm, heightMm);
+      pdf.save(`AKKFG_ID_Card_${reg.unique_id || 'Player'}.pdf`);
     } catch (err) {
-      console.error('Error exporting ID card as PNG:', err);
+      console.error('Error exporting ID card as PDF:', err);
       alert('Unable to export ID card. Please try again.');
     } finally {
       setIsDownloading(false);
@@ -1768,7 +1774,7 @@ const Dashboard = ({ user, onCompleteRegistration }: { user: User, onCompleteReg
                 <button
                   type="button"
                   disabled={isDownloading}
-                  onClick={() => handleDownloadPNG(registration)}
+                  onClick={() => handleDownloadPDF(registration)}
                   className={`w-full text-white py-3.5 px-6 rounded-xl font-bold text-md shadow-md transition-all flex items-center justify-center gap-2 ${
                     isDownloading
                       ? 'bg-slate-400 cursor-not-allowed'
