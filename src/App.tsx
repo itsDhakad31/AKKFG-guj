@@ -780,9 +780,9 @@ const getProxiedImageUrl = (url?: string | null) => {
 };
 
 const IDCard = ({ data }: { data: RegistrationData }) => (
-  <div id="akkfg-id-card-render" className="w-full max-w-sm mx-auto bg-white rounded-2xl shadow-2xl overflow-hidden border-2 border-akkfg-blue relative">
-    <div className="bg-akkfg-blue p-4 text-white flex items-center justify-center gap-3 relative overflow-hidden">
-      <div className="absolute top-0 right-0 w-20 h-20 bg-akkfg-orange rotate-45 translate-x-10 -translate-y-10" />
+  <div id="akkfg-id-card-render" className="w-full max-w-sm mx-auto rounded-2xl shadow-2xl overflow-hidden border-2 relative" style={{ backgroundColor: '#ffffff', borderColor: '#1E3A8A' }}>
+    <div className="p-4 flex items-center justify-center gap-3 relative overflow-hidden" style={{ backgroundColor: '#1E3A8A', color: '#ffffff' }}>
+      <div className="absolute top-0 right-0 w-20 h-20 rotate-45 translate-x-10 -translate-y-10" style={{ backgroundColor: '#F27D26' }} />
       <img
         src={getProxiedImageUrl("https://files.catbox.moe/u0lznd.jpg")}
         alt="AKKFG Logo"
@@ -797,7 +797,7 @@ const IDCard = ({ data }: { data: RegistrationData }) => (
     </div>
 
     <div className="p-6 flex flex-col items-center">
-      <div className="w-32 h-32 bg-slate-100 rounded-xl border-4 border-white shadow-md overflow-hidden mb-4">
+      <div className="w-32 h-32 rounded-xl border-4 shadow-md overflow-hidden mb-4" style={{ backgroundColor: '#f1f5f9', borderColor: '#ffffff' }}>
         <img
           src={getProxiedImageUrl(data.doc_photo) || `https://i.pravatar.cc/150?u=${data.name}`}
           className="w-full h-full object-cover"
@@ -807,50 +807,50 @@ const IDCard = ({ data }: { data: RegistrationData }) => (
       </div>
 
       <div className="text-center space-y-1.5 mb-6 w-full">
-        <h4 className="text-xl font-bold text-akkfg-blue uppercase">{data.name}</h4>
-        <p className="text-akkfg-orange font-bold text-sm tracking-widest uppercase mb-2">
+        <h4 className="text-xl font-bold uppercase" style={{ color: '#1E3A8A' }}>{data.name}</h4>
+        <p className="font-bold text-sm tracking-widest uppercase mb-2" style={{ color: '#F27D26' }}>
           {data.role === 'Student' ? 'Player' : data.role === 'Technical' ? 'Technical Team' : data.role}
         </p>
 
         {/* Generated 3 IDs */}
-        <div className="bg-slate-50 border border-slate-100 rounded-xl p-3 space-y-2 text-[11px] font-mono text-left max-w-[280px] mx-auto shadow-inner">
+        <div className="rounded-xl p-3 space-y-2 text-[11px] font-mono text-left max-w-[280px] mx-auto shadow-inner border" style={{ backgroundColor: '#f8fafc', borderColor: '#f1f5f9' }}>
           <div className="flex justify-between items-center">
-            <span className="text-slate-400 font-sans font-bold">AKKFG ID:</span>
-            <span className="font-bold text-akkfg-blue">{data.unique_id || 'Pending'}</span>
+            <span className="font-sans font-bold" style={{ color: '#94a3b8' }}>AKKFG ID:</span>
+            <span className="font-bold" style={{ color: '#1E3A8A' }}>{data.unique_id || 'Pending'}</span>
           </div>
-          <div className="flex justify-between items-center border-t border-slate-100 pt-1.5">
-            <span className="text-slate-400 font-sans font-bold">KKFI ID:</span>
-            <span className="font-bold text-akkfg-blue">
+          <div className="flex justify-between items-center border-t pt-1.5" style={{ borderTopColor: '#f1f5f9' }}>
+            <span className="font-sans font-bold" style={{ color: '#94a3b8' }}>KKFI ID:</span>
+            <span className="font-bold" style={{ color: '#1E3A8A' }}>
               {data.unique_id ? data.unique_id.replace('AKKFG', 'KKFI') : 'Pending'}
             </span>
           </div>
-          <div className="flex justify-between items-center border-t border-slate-100 pt-1.5">
-            <span className="text-slate-400 font-sans font-bold">NSRS ID:</span>
-            <span className="font-bold text-akkfg-blue">
+          <div className="flex justify-between items-center border-t pt-1.5" style={{ borderTopColor: '#f1f5f9' }}>
+            <span className="font-sans font-bold" style={{ color: '#94a3b8' }}>NSRS ID:</span>
+            <span className="font-bold" style={{ color: '#1E3A8A' }}>
               {data.unique_id ? data.unique_id.replace('AKKFG', 'NSRS') : 'Pending'}
             </span>
           </div>
         </div>
       </div>
 
-      <div className="w-full grid grid-cols-2 gap-4 text-[10px] border-t border-slate-100 pt-4">
+      <div className="w-full grid grid-cols-2 gap-4 text-[10px] border-t pt-4" style={{ borderTopColor: '#f1f5f9' }}>
         <div>
-          <p className="text-slate-400 uppercase font-bold">DOB</p>
-          <p className="font-bold text-slate-700">{data.dob}</p>
+          <p className="uppercase font-bold" style={{ color: '#94a3b8' }}>DOB</p>
+          <p className="font-bold" style={{ color: '#334155' }}>{data.dob}</p>
         </div>
         <div>
-          <p className="text-slate-400 uppercase font-bold">Gender</p>
-          <p className="font-bold text-slate-700">{data.gender}</p>
+          <p className="uppercase font-bold" style={{ color: '#94a3b8' }}>Gender</p>
+          <p className="font-bold" style={{ color: '#334155' }}>{data.gender}</p>
         </div>
         <div className="col-span-2">
-          <p className="text-slate-400 uppercase font-bold">Address</p>
-          <p className="font-bold text-slate-700">{data.address_city}, {data.address_country}</p>
+          <p className="uppercase font-bold" style={{ color: '#94a3b8' }}>Address</p>
+          <p className="font-bold" style={{ color: '#334155' }}>{data.address_city}, {data.address_country}</p>
         </div>
       </div>
     </div>
 
-    <div className="bg-slate-50 p-3 text-center border-t border-slate-100">
-      <p className="text-[8px] text-slate-400 uppercase font-bold tracking-tighter">Authorized by Amateur Kho-Kho Federation Gujarat</p>
+    <div className="p-3 text-center border-t" style={{ backgroundColor: '#f8fafc', borderTopColor: '#f1f5f9' }}>
+      <p className="text-[8px] uppercase font-bold tracking-tighter" style={{ color: '#94a3b8' }}>Authorized by Amateur Kho-Kho Federation Gujarat</p>
     </div>
   </div>
 );
