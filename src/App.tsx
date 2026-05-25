@@ -781,6 +781,7 @@ const IDCard = ({ data }: { data: RegistrationData }) => (
         alt="AKKFG Logo"
         className="w-10 h-10 object-contain rounded-full bg-white p-0.5 relative z-10"
         referrerPolicy="no-referrer"
+        crossOrigin="anonymous"
       />
       <div className="text-left relative z-10">
         <h3 className="text-lg font-bold leading-tight">AKKFG</h3>
@@ -794,6 +795,7 @@ const IDCard = ({ data }: { data: RegistrationData }) => (
           src={data.doc_photo || `https://i.pravatar.cc/150?u=${data.name}`}
           className="w-full h-full object-cover"
           referrerPolicy="no-referrer"
+          crossOrigin="anonymous"
         />
       </div>
 
