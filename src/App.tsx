@@ -28,6 +28,7 @@ import {
 } from 'lucide-react';
 import { NewsItem, EventItem, RegistrationData, SiteStats, User, RegistrationFormData } from './types';
 import { supabase } from './supabase';
+import html2canvas from 'html2canvas';
 
 // --- Components ---
 
@@ -755,8 +756,8 @@ const About = () => (
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
         {[
           { name: 'Akshay Malete', role: 'President', image: 'https://files.catbox.moe/vl5lw8.jpg' },
-          { name: 'Santosh Garud', role: 'General Secretary', image: 'https://files.catbox.moe/492grk.jpg' },
-          { name: 'Shaileshbhai Patel', role: 'Treasurer', image: 'https://files.catbox.moe/xphty6.jpg' },
+          { name: 'Shaileshbhai Patel', role: 'General Secretary', image: 'https://files.catbox.moe/492grk.jpg' },
+          { name: 'Santosh Garud', role: 'Treasurer', image: 'https://files.catbox.moe/xphty6.jpg' },
         ].map((person, i) => (
           <div key={i} className="text-center">
             <div className="w-32 h-32 rounded-full overflow-hidden mx-auto mb-4 border-4 border-white shadow-lg">
@@ -772,7 +773,7 @@ const About = () => (
 );
 
 const IDCard = ({ data }: { data: RegistrationData }) => (
-  <div className="w-full max-w-sm mx-auto bg-white rounded-2xl shadow-2xl overflow-hidden border-2 border-akkfg-blue relative">
+  <div id="akkfg-id-card-render" className="w-full max-w-sm mx-auto bg-white rounded-2xl shadow-2xl overflow-hidden border-2 border-akkfg-blue relative">
     <div className="bg-akkfg-blue p-4 text-white flex items-center justify-center gap-3 relative overflow-hidden">
       <div className="absolute top-0 right-0 w-20 h-20 bg-akkfg-orange rotate-45 translate-x-10 -translate-y-10" />
       <img
@@ -1128,7 +1129,7 @@ const Registration = ({ setActiveTab }: { setActiveTab: (tab: string) => void })
               <div className="space-y-6 mt-10">
                 <h3 className="text-xl text-akkfg-blue font-bold border-l-4 border-akkfg-orange pl-4">Registration Fees & Bank Details</h3>
                 <div className="bg-slate-50 border border-slate-200 rounded-3xl p-6 sm:p-8 grid grid-cols-1 md:grid-cols-2 gap-8 shadow-sm">
-                  
+
                   {/* Registration Fees Section */}
                   <div className="space-y-4">
                     <h4 className="text-md font-bold text-akkfg-orange uppercase tracking-wider flex items-center gap-2 font-sans">
@@ -1640,6 +1641,37 @@ const Contact = () => {
 const Dashboard = ({ user, onCompleteRegistration }: { user: User, onCompleteRegistration: () => void }) => {
   const [registration, setRegistration] = useState<RegistrationData | null>(null);
   const [loading, setLoading] = useState(true);
+  const [isDownloading, setIsDownloading] = useState(false);
+
+  const handleDownloadPNG = async (reg: RegistrationData) => {
+    const cardElement = document.getElementById('akkfg-id-card-render');
+    if (!cardElement) return;
+
+    try {
+      setIsDownloading(true);
+      const canvas = await html2canvas(cardElement, {
+        scale: 3, // High resolution scale factor
+        useCORS: true, // Allow cross-origin images to render correctly
+        backgroundColor: '#ffffff',
+        logging: false
+      });
+
+      const dataUrl = canvas.toDataURL('image/png');
+      const link = document.createElement('a');
+      const filename = `AKKFG_ID_Card_${reg.unique_id || 'Player'}.png`;
+
+      link.href = dataUrl;
+      link.download = filename;
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+    } catch (err) {
+      console.error('Error exporting ID card as PNG:', err);
+      alert('Unable to export ID card. Please try again.');
+    } finally {
+      setIsDownloading(false);
+    }
+  };
 
   useEffect(() => {
     if (user.role === 'Admin') {
@@ -1729,7 +1761,22 @@ const Dashboard = ({ user, onCompleteRegistration }: { user: User, onCompleteReg
           <div>
             <h3 className="text-xl font-bold text-akkfg-blue mb-6">Your ID Card</h3>
             {registration && registration.status === 'Approved' ? (
-              <IDCard data={registration} />
+              <div className="space-y-4">
+                <IDCard data={registration} />
+                <button
+                  type="button"
+                  disabled={isDownloading}
+                  onClick={() => handleDownloadPNG(registration)}
+                  className={`w-full text-white py-3.5 px-6 rounded-xl font-bold text-md shadow-md transition-all flex items-center justify-center gap-2 ${
+                    isDownloading
+                      ? 'bg-slate-400 cursor-not-allowed'
+                      : 'bg-akkfg-orange hover:bg-akkfg-orange/95 hover:shadow-lg'
+                  }`}
+                >
+                  <Download size={18} className={isDownloading ? 'animate-bounce' : ''} />
+                  {isDownloading ? 'Downloading...' : 'Download ID Card'}
+                </button>
+              </div>
             ) : (
               <div className="aspect-[3/4] bg-slate-100 rounded-2xl border-2 border-dashed border-slate-200 flex items-center justify-center text-slate-400 text-center p-8">
                 <p>Your official ID card will be generated once your registration is approved by the federation.</p>
@@ -2188,8 +2235,8 @@ const AdminPanel = () => {
             key={tab.id}
             onClick={() => setAdminTab(tab.id)}
             className={`px-4 py-3 font-bold text-sm flex items-center gap-2 border-b-2 transition-all whitespace-nowrap ${adminTab === tab.id
-                ? 'border-akkfg-orange text-akkfg-orange'
-                : 'border-transparent text-slate-500 hover:text-akkfg-blue'
+              ? 'border-akkfg-orange text-akkfg-orange'
+              : 'border-transparent text-slate-500 hover:text-akkfg-blue'
               }`}
           >
             <tab.icon size={18} />

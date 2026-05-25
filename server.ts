@@ -8,6 +8,7 @@ import http from "http";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { supabase, supabaseAdmin } from "./src/supabase";
+import { sendApprovalEmail } from "./email";
 
 function requireEnv(name: string) {
   const v = process.env[name];
@@ -731,6 +732,10 @@ app.put('/api/admin/registrations/:id/status', authMiddleware, isAdminMiddleware
   if (status === 'Approved' && reg && reg.email) {
     const userRole = reg.role === 'Coach' ? 'Coach' : 'Player';
     await supabaseAdmin.from('users').update({ role: userRole }).eq('email', reg.email);
+    
+    // Asynchronously send approval email with dynamic AKKFG, KKFI, and NSRS credentials
+    sendApprovalEmail(reg.email, reg.name, reg.role, unique_id, reg.dob, reg.gender)
+      .catch(err => console.error('Error sending registration approval email:', err));
   }
 
   res.json({ success: true, unique_id });
