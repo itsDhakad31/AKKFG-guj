@@ -49,7 +49,7 @@ const LoginModal = ({ isOpen, onClose, onLogin }: { isOpen: boolean, onClose: ()
       const { error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
         options: {
-          redirectTo: window.location.origin
+          redirectTo: window.location.origin + '/'
         }
       });
       if (error) throw error;
@@ -1091,7 +1091,7 @@ const Registration = ({ setActiveTab }: { setActiveTab: (tab: string) => void })
                 await supabase.auth.signInWithOAuth({
                   provider: 'google',
                   options: {
-                    redirectTo: window.location.origin
+                    redirectTo: window.location.origin + '/'
                   }
                 });
               } catch (err) {
