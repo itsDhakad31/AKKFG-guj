@@ -57,6 +57,8 @@ export interface RegistrationData {
   coaching_cert?: string;
   edu_qualification?: string;
   referee_cert?: string;
+  kkfi_id?: string;
+  nsrs_id?: string;
 }
 
 // Frontend form state

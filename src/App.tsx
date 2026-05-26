@@ -28,7 +28,7 @@ import {
 } from 'lucide-react';
 import { NewsItem, EventItem, RegistrationData, SiteStats, User, RegistrationFormData } from './types';
 import { supabase } from './supabase';
-import html2canvas from 'html2canvas';
+import html2canvas from 'html2canvas-pro';
 import { jsPDF } from 'jspdf';
 
 // --- Components ---
@@ -222,7 +222,6 @@ const Navbar = ({ activeTab, setActiveTab, user, onLogout, onOpenLogin }: {
     { id: 'events', label: 'Events' },
     { id: 'register', label: 'Registrations' },
     { id: 'media', label: 'Media & News' },
-    { id: 'downloads', label: 'Downloads' },
     { id: 'contact', label: 'Contact' },
   ];
 
@@ -432,7 +431,6 @@ const Footer = () => (
             <li><a href="#" className="hover:text-akkfg-orange transition-colors">About Us</a></li>
             <li><a href="#" className="hover:text-akkfg-orange transition-colors">Upcoming Events</a></li>
             <li><a href="#" className="hover:text-akkfg-orange transition-colors">Player Registration</a></li>
-            <li><a href="#" className="hover:text-akkfg-orange transition-colors">Rules & Regulations</a></li>
           </ul>
         </div>
         <div>
@@ -440,15 +438,15 @@ const Footer = () => (
           <ul className="space-y-4 text-sm">
             <li className="flex items-start gap-3">
               <MapPin size={18} className="text-akkfg-orange shrink-0" />
-              <span>Sports Complex, Stadium Road, Ahmedabad, Gujarat 380009</span>
+              <span>G/29, Ramway Plaza Dandia Bazar, Opposite Gandevikar, Vadodara, Gujarat 390001</span>
             </li>
             <li className="flex items-center gap-3">
               <Phone size={18} className="text-akkfg-orange shrink-0" />
-              <span>+91 79 1234 5678</span>
+              <span>+91 9998846555</span>
             </li>
             <li className="flex items-center gap-3">
               <Mail size={18} className="text-akkfg-orange shrink-0" />
-              <span>info@akkfgujarat.in</span>
+              <span>amateurkhokhofederationgujarat@gmail.com</span>
             </li>
           </ul>
         </div>
@@ -523,11 +521,11 @@ const Home = ({ setActiveTab }: { setActiveTab: (tab: string) => void }) => {
         <div className="absolute inset-0 z-0">
 
           <img
-            src="https://i.ibb.co/TDRxm07w/Kho-Kho-Ground-Measurement-1024x614-1.webp"
-            className="w-full h-full object-cover opacity-20"
+            src="https://files.catbox.moe/wujxjt.jpg"
+            className="w-full h-full object-cover opacity-60"
             referrerPolicy="no-referrer"
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-akkfg-blue via-akkfg-blue/90 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-r from-akkfg-blue via-akkfg-blue/80 to-transparent" />
 
         </div>
 
@@ -680,33 +678,19 @@ const Home = ({ setActiveTab }: { setActiveTab: (tab: string) => void }) => {
 
       {/* Quick Actions */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          <div className="bg-akkfg-orange rounded-3xl p-10 text-white relative overflow-hidden group">
+        <div className="max-w-3xl mx-auto">
+          <div className="bg-akkfg-orange rounded-3xl p-10 text-white relative overflow-hidden group text-center flex flex-col items-center justify-center">
             <div className="relative z-10">
-              <h3 className="text-3xl mb-4">Player Registration</h3>
-              <p className="text-white/80 mb-8 max-w-md">Join the official database of Gujarat Kho-Kho players. Get your digital ID and eligibility for state tournaments.</p>
+              <h3 className="text-3xl mb-4">Player & Coach Registration</h3>
+              <p className="text-white/80 mb-8 max-w-md mx-auto">Join the official database of Gujarat Kho-Kho players, coaches, and officials. Get your digital ID card and eligibility for state tournaments.</p>
               <button
                 onClick={() => setActiveTab('register')}
-                className="bg-white text-akkfg-orange px-8 py-3 rounded-full font-bold hover:scale-105 transition-transform"
+                className="bg-white text-akkfg-orange px-8 py-3 rounded-full font-bold hover:scale-105 transition-transform shadow-md"
               >
                 Start Registration
               </button>
             </div>
             <Users size={200} className="absolute -bottom-10 -right-10 text-white/10 group-hover:scale-110 transition-transform duration-700" />
-          </div>
-
-          <div className="bg-akkfg-blue rounded-3xl p-10 text-white relative overflow-hidden group">
-            <div className="relative z-10">
-              <h3 className="text-3xl mb-4">Download Center</h3>
-              <p className="text-white/80 mb-8 max-w-md">Access official forms, circulars, rulebooks, and tournament guidelines directly from the federation.</p>
-              <button
-                onClick={() => setActiveTab('downloads')}
-                className="bg-white text-akkfg-blue px-8 py-3 rounded-full font-bold hover:scale-105 transition-transform"
-              >
-                Browse Documents
-              </button>
-            </div>
-            <Download size={200} className="absolute -bottom-10 -right-10 text-white/10 group-hover:scale-110 transition-transform duration-700" />
           </div>
         </div>
       </section>
@@ -748,7 +732,7 @@ const About = () => (
         animate={{ opacity: 1, x: 0 }}
         className="rounded-3xl overflow-hidden shadow-2xl"
       >
-        <img src="https://picsum.photos/seed/about-khokho/800/600" className="w-full h-full object-cover" referrerPolicy="no-referrer" />
+        <img src="https://files.catbox.moe/9q53zp.jpg" className="w-full h-full object-cover" referrerPolicy="no-referrer" />
       </motion.div>
     </section>
 
@@ -779,25 +763,92 @@ const getProxiedImageUrl = (url?: string | null) => {
   return `/api/proxy-image?url=${encodeURIComponent(url)}`;
 };
 
-const IDCard = ({ data }: { data: RegistrationData }) => (
-  <div id="akkfg-id-card-render" className="w-full max-w-sm mx-auto rounded-2xl shadow-2xl overflow-hidden border-2 relative" style={{ backgroundColor: '#ffffff', borderColor: '#1E3A8A' }}>
-    <div className="p-4 flex items-center justify-center gap-3 relative overflow-hidden" style={{ backgroundColor: '#1E3A8A', color: '#ffffff' }}>
-      <div className="absolute top-0 right-0 w-20 h-20 rotate-45 translate-x-10 -translate-y-10" style={{ backgroundColor: '#F27D26' }} />
-      <img
-        src={getProxiedImageUrl("https://files.catbox.moe/u0lznd.jpg")}
-        alt="AKKFG Logo"
-        className="w-10 h-10 object-contain rounded-full bg-white p-0.5 relative z-10"
-        referrerPolicy="no-referrer"
-        crossOrigin="anonymous"
-      />
-      <div className="text-left relative z-10">
-        <h3 className="text-lg font-bold leading-tight">AKKFG</h3>
-        <p className="text-[9px] uppercase tracking-widest opacity-80 font-semibold">Gujarat Kho-Kho Federation</p>
-      </div>
-    </div>
+const IDCard = ({ data }: { data: RegistrationData }) => {
+  const roleLabel = data.role === 'Student' ? 'PLAYER' : data.role === 'Technical' ? 'TECHNICAL OFFICIAL' : data.role.toUpperCase();
 
-    <div className="p-6 flex flex-col items-center">
-      <div className="w-32 h-32 rounded-xl border-4 shadow-md overflow-hidden mb-4" style={{ backgroundColor: '#f1f5f9', borderColor: '#ffffff' }}>
+  return (
+    <div
+      id="akkfg-id-card-render"
+      className="w-[380px] h-[640px] mx-auto rounded-3xl overflow-hidden border relative select-none shadow-2xl bg-white"
+      style={{
+        borderColor: '#e2e8f0',
+        fontFamily: '"Outfit", sans-serif',
+      }}
+    >
+      {/* Background/Watermark Elements */}
+      <div className="absolute inset-0 pointer-events-none z-0 overflow-hidden">
+        {/* Curved Left Accent SVG matching the exact shape in the image */}
+        <svg className="absolute inset-0 w-full h-full" viewBox="0 0 380 640" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="leftGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stopColor="#f19e18" />
+              <stop offset="60%" stopColor="#f57e20" />
+              <stop offset="100%" stopColor="#ffd200" />
+            </linearGradient>
+          </defs>
+          {/* Orange Gradient Background Accent */}
+          <path d="M0,0 L155,0 C120,200 45,350 40,480 C36,560 5,610 0,640 Z" fill="url(#leftGrad)" />
+          {/* White Accent Curve */}
+          <path d="M155,0 C125,200 50,350 45,480 C41,560 10,610 5,640" fill="none" stroke="#ffffff" strokeWidth="4" />
+          {/* Yellow edge accent (bottom left tip) */}
+          <path d="M0,580 C15,600 20,620 25,640 L0,640 Z" fill="#ffd200" opacity="0.3" />
+          {/* Red Accent Swoosh */}
+          <path d="M98,310 C90,380 50,560 88,610 C68,590 56,540 68,440 C75,380 88,335 98,310 Z" fill="#d91e18" />
+        </svg>
+
+        {/* Faint Center Circular Watermark and Silhouette */}
+        <svg className="absolute inset-0 w-full h-full opacity-[0.06]" viewBox="0 0 380 640" xmlns="http://www.w3.org/2000/svg">
+          <g fill="#1E3A8A">
+            <circle cx="190" cy="460" r="18" />
+            <path d="M190,483 c-20,0 -35,15 -35,35 c0,5 2,10 5,14 l25,30 c3,4 8,6 13,4 l50,-20 c8,-3 12,-12 9,-20 l-15,-30 c-4,-8 -12,-13 -21,-13 z" />
+            <path d="M210,530 l15,20 c4,5 12,6 17,2 l40,-35 c5,-4 6,-12 2,-17 c-4,-5 -12,-6 -17,-2 l-30,26 l-12,-16 c-4,-5 -12,-6 -17,-2 c-5,4 -6,12 -2,17 z" />
+            <path d="M165,510 l-25,5 c-6,1 -10,7 -9,13 c1,6 7,10 13,9 l25,-5 c6,-1 10,-7 9,-13 c-1,-6 -7,-10 -13,-9 z" />
+          </g>
+          <path id="circleTextPath" d="M 60,460 A 130,130 0 1,1 320,460" fill="none" />
+          <text fill="#1E3A8A" fontSize="13" fontWeight="900" letterSpacing="3">
+            <textPath href="#circleTextPath" startOffset="50%" textAnchor="middle">
+              AMATEUR KHO KHO FEDERATION GUJARAT
+            </textPath>
+          </text>
+        </svg>
+      </div>
+
+      {/* Top Left Circular Logo Container */}
+      <div
+        className="absolute top-[32px] left-[32px] w-[84px] h-[84px] rounded-full bg-white flex items-center justify-center shadow-lg border-2 z-10"
+        style={{ borderColor: '#f57e20' }}
+      >
+        <img
+          src={getProxiedImageUrl("https://files.catbox.moe/u0lznd.jpg")}
+          className="w-[74px] h-[74px] rounded-full object-contain"
+          referrerPolicy="no-referrer"
+          crossOrigin="anonymous"
+        />
+      </div>
+
+      {/* Top Right Header Text */}
+      <div className="absolute top-[22px] left-[132px] right-[15px] text-left z-10">
+        <div style={{ fontFamily: '"Outfit", sans-serif', fontWeight: 800, fontSize: '15px', color: '#1E3A8A', letterSpacing: '0.5px', lineHeight: '1' }}>
+          AMATEUR <span style={{ fontFamily: 'Georgia, serif', fontStyle: 'italic', fontSize: '24px', color: '#b91c1c', fontWeight: 'bold', display: 'inline-block', transform: 'translateY(1px)' }}>Kho Kho</span>
+        </div>
+        <div style={{ fontFamily: '"Outfit", sans-serif', fontWeight: 900, fontSize: '16.5px', color: '#b91c1c', letterSpacing: '0.2px', marginTop: '1px', lineHeight: '1.1' }}>
+          FEDERATION GUJARAT
+        </div>
+        <div style={{ fontSize: '7.5px', color: '#334155', fontWeight: 600, marginTop: '5px', lineHeight: '1.2' }}>
+          <span style={{ fontWeight: 800, color: '#000000' }}>Office Address :</span> Bhau Kale Lane, Nr. Thakorbhai Hospital,<br />
+          Nr. Saibaba Temple, Raopura, Vadodara-390 001.
+        </div>
+      </div>
+
+      {/* Card Type Title Banner */}
+      <div className="absolute top-[125px] left-0 right-0 text-center z-10">
+        <h3 style={{ color: '#1E3A8A', fontFamily: '"Outfit", sans-serif', fontWeight: 800, fontSize: '18px', letterSpacing: '1px' }}>
+          {roleLabel} I-CARD
+        </h3>
+      </div>
+
+      {/* Photo Frame Container */}
+      <div className="absolute top-[155px] left-[135px] w-[110px] h-[132px] border-2 border-black bg-slate-50 overflow-hidden shadow-md z-10">
         <img
           src={getProxiedImageUrl(data.doc_photo) || `https://i.pravatar.cc/150?u=${data.name}`}
           className="w-full h-full object-cover"
@@ -806,54 +857,76 @@ const IDCard = ({ data }: { data: RegistrationData }) => (
         />
       </div>
 
-      <div className="text-center space-y-1.5 mb-6 w-full">
-        <h4 className="text-xl font-bold uppercase" style={{ color: '#1E3A8A' }}>{data.name}</h4>
-        <p className="font-bold text-sm tracking-widest uppercase mb-2" style={{ color: '#F27D26' }}>
-          {data.role === 'Student' ? 'Player' : data.role === 'Technical' ? 'Technical Team' : data.role}
-        </p>
+      {/* Member Full Name */}
+      <div className="absolute top-[296px] left-[30px] right-[30px] text-center z-10">
+        <h4 style={{ color: '#1E3A8A', fontFamily: '"Outfit", sans-serif', fontWeight: 850, fontSize: '17.5px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+          {data.name}
+        </h4>
+      </div>
 
-        {/* Generated 3 IDs */}
-        <div className="rounded-xl p-3 space-y-2 text-[11px] font-mono text-left max-w-[280px] mx-auto shadow-inner border" style={{ backgroundColor: '#f8fafc', borderColor: '#f1f5f9' }}>
-          <div className="flex justify-between items-center">
-            <span className="font-sans font-bold" style={{ color: '#94a3b8' }}>AKKFG ID:</span>
-            <span className="font-bold" style={{ color: '#1E3A8A' }}>{data.unique_id || 'Pending'}</span>
-          </div>
-          <div className="flex justify-between items-center border-t pt-1.5" style={{ borderTopColor: '#f1f5f9' }}>
-            <span className="font-sans font-bold" style={{ color: '#94a3b8' }}>KKFI ID:</span>
-            <span className="font-bold" style={{ color: '#1E3A8A' }}>
-              {data.unique_id ? data.unique_id.replace('AKKFG', 'KKFI') : 'Pending'}
-            </span>
-          </div>
-          <div className="flex justify-between items-center border-t pt-1.5" style={{ borderTopColor: '#f1f5f9' }}>
-            <span className="font-sans font-bold" style={{ color: '#94a3b8' }}>NSRS ID:</span>
-            <span className="font-bold" style={{ color: '#1E3A8A' }}>
-              {data.unique_id ? data.unique_id.replace('AKKFG', 'NSRS') : 'Pending'}
-            </span>
-          </div>
+      {/* Main Details (DOB, Gender) */}
+      <div className="absolute top-[325px] left-[105px] text-left space-y-2 z-10" style={{ fontFamily: '"Outfit", sans-serif' }}>
+        <div className="flex items-center gap-1.5" style={{ fontSize: '14.5px', color: '#1E3A8A', fontWeight: 800 }}>
+          <span>D.O.B. :</span>
+          <span style={{ color: '#334155', fontWeight: 700 }}>{data.dob}</span>
+        </div>
+        <div className="flex items-center gap-1.5" style={{ fontSize: '14.5px', color: '#1E3A8A', fontWeight: 800 }}>
+          <span>GENDER :</span>
+          <span style={{ color: '#334155', fontWeight: 700 }}>{data.gender.toUpperCase()}</span>
         </div>
       </div>
 
-      <div className="w-full grid grid-cols-2 gap-4 text-[10px] border-t pt-4" style={{ borderTopColor: '#f1f5f9' }}>
-        <div>
-          <p className="uppercase font-bold" style={{ color: '#94a3b8' }}>DOB</p>
-          <p className="font-bold" style={{ color: '#334155' }}>{data.dob}</p>
+      {/* UID Box Pill Accent */}
+      <div
+        className="absolute top-[382px] left-[105px] flex items-center h-[30px] w-[240px] rounded-full border-2 overflow-hidden z-10"
+        style={{ borderColor: '#1E3A8A' }}
+      >
+        <div
+          className="flex items-center justify-center h-full w-[70px]"
+          style={{ backgroundColor: '#1E3A8A', color: '#ffffff', fontFamily: '"Outfit", sans-serif', fontWeight: 900, fontSize: '14px', letterSpacing: '0.5px' }}
+        >
+          UID
         </div>
-        <div>
-          <p className="uppercase font-bold" style={{ color: '#94a3b8' }}>Gender</p>
-          <p className="font-bold" style={{ color: '#334155' }}>{data.gender}</p>
+        <div
+          className="flex-1 flex items-center pl-3 h-full"
+          style={{ backgroundColor: '#ffffff', color: '#1E3A8A', fontFamily: 'monospace', fontWeight: 800, fontSize: '13.5px' }}
+        >
+          {data.unique_id || 'PENDING'}
         </div>
-        <div className="col-span-2">
-          <p className="uppercase font-bold" style={{ color: '#94a3b8' }}>Address</p>
-          <p className="font-bold" style={{ color: '#334155' }}>{data.address_city}, {data.address_country}</p>
+      </div>
+
+      {/* Secondary IDs (KKFI, NSRS) */}
+      <div className="absolute top-[430px] left-[105px] text-left space-y-2.5 z-10" style={{ fontFamily: '"Outfit", sans-serif' }}>
+        <div className="flex items-center gap-2" style={{ fontSize: '13.5px', color: '#1E3A8A', fontWeight: 800 }}>
+          <span>KKFI :</span>
+          <span style={{ color: '#334155', fontWeight: 700, fontFamily: 'monospace', fontSize: '13px' }}>
+            {data.kkfi_id || 'PENDING'}
+          </span>
+        </div>
+        <div className="flex items-center gap-2" style={{ fontSize: '13.5px', color: '#1E3A8A', fontWeight: 800 }}>
+          <span>NSRS :</span>
+          <span style={{ color: '#334155', fontWeight: 700, fontFamily: 'monospace', fontSize: '13px' }}>
+            {data.nsrs_id || 'PENDING'}
+          </span>
+        </div>
+      </div>
+
+      {/* Authorized Signatures Bottom Banner */}
+      <div className="absolute top-[565px] left-[90px] right-[25px] flex justify-between z-10" style={{ fontFamily: '"Outfit", sans-serif' }}>
+        <div className="text-center">
+          {/* Space for signature */}
+          <div className="h-[25px]" />
+          <span style={{ color: '#1E3A8A', fontWeight: 800, fontSize: '11px', letterSpacing: '0.5px' }}>PRESIDENT</span>
+        </div>
+        <div className="text-center">
+          {/* Space for signature */}
+          <div className="h-[25px]" />
+          <span style={{ color: '#1E3A8A', fontWeight: 800, fontSize: '11px', letterSpacing: '0.5px' }}>SECRETARY</span>
         </div>
       </div>
     </div>
-
-    <div className="p-3 text-center border-t" style={{ backgroundColor: '#f8fafc', borderTopColor: '#f1f5f9' }}>
-      <p className="text-[8px] uppercase font-bold tracking-tighter" style={{ color: '#94a3b8' }}>Authorized by Amateur Kho-Kho Federation Gujarat</p>
-    </div>
-  </div>
-);
+  );
+};
 
 const Registration = ({ setActiveTab }: { setActiveTab: (tab: string) => void }) => {
   const [formData, setFormData] = useState<RegistrationFormData>({
@@ -874,7 +947,9 @@ const Registration = ({ setActiveTab }: { setActiveTab: (tab: string) => void })
     year_passing: '',
     coaching_cert: '',
     edu_qualification: '',
-    referee_cert: ''
+    referee_cert: '',
+    kkfi_id: '',
+    nsrs_id: ''
   });
   const [submitted, setSubmitted] = useState(false);
   const [result, setResult] = useState<RegistrationData | null>(null);
@@ -1006,7 +1081,7 @@ const Registration = ({ setActiveTab }: { setActiveTab: (tab: string) => void })
         <div className="bg-akkfg-blue p-8 text-white flex flex-col md:flex-row md:items-center md:justify-between gap-6">
           <div>
             <h2 className="text-3xl mb-2">Federation Registration</h2>
-            <p className="text-white/70">Official registration for Coaches, Students and Technical Teams of AKKFG.</p>
+            <p className="text-white/70">Official registration for Coaches, Students and Technical Officials of AKKFG.</p>
           </div>
           <button
             type="button"
@@ -1054,7 +1129,7 @@ const Registration = ({ setActiveTab }: { setActiveTab: (tab: string) => void })
               onClick={() => setFormData({ ...formData, role: role as any })}
               className={`flex-1 py-6 font-bold text-lg transition-all ${formData.role === role ? 'text-akkfg-orange bg-akkfg-orange/5 border-b-2 border-akkfg-orange' : 'text-slate-400 hover:text-slate-600'}`}
             >
-              {role === 'Student' ? 'Player' : role === 'Technical' ? 'Technical Team' : role} Registration
+              {role === 'Student' ? 'Player' : role === 'Technical' ? 'Technical Official' : role} Registration
             </button>
           ))}
         </div>
@@ -1118,19 +1193,17 @@ const Registration = ({ setActiveTab }: { setActiveTab: (tab: string) => void })
                   <input type="text" className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-akkfg-orange" value={formData.year_passing} onChange={e => setFormData({ ...formData, year_passing: e.target.value })} />
                 </div>
                 <div className="space-y-2">
-                  <label className="text-sm font-bold text-slate-700">Coaching Certificate</label>
-                  <input type="file" accept="image/*,.pdf" className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-akkfg-orange file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-akkfg-orange/10 file:text-akkfg-orange hover:file:bg-akkfg-orange/20" onChange={e => handleFileUpload(e, 'coaching_cert')} />
-                  {formData.coaching_cert && <p className="text-xs text-emerald-600 font-semibold mt-1">✓ File uploaded</p>}
+                  <label className="text-sm font-bold text-slate-700">KKFI ID</label>
+                  <input type="text" className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-akkfg-orange" value={formData.kkfi_id} onChange={e => setFormData({ ...formData, kkfi_id: e.target.value })} />
                 </div>
                 <div className="space-y-2">
+                  <label className="text-sm font-bold text-slate-700">NSRS ID</label>
+                  <input type="text" className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-akkfg-orange" value={formData.nsrs_id} onChange={e => setFormData({ ...formData, nsrs_id: e.target.value })} />
+                </div>
+                <div className="space-y-2 md:col-span-2">
                   <label className="text-sm font-bold text-slate-700">Education Qualification Document</label>
                   <input type="file" accept="image/*,.pdf" className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-akkfg-orange file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-akkfg-orange/10 file:text-akkfg-orange hover:file:bg-akkfg-orange/20" onChange={e => handleFileUpload(e, 'edu_qualification')} />
                   {formData.edu_qualification && <p className="text-xs text-emerald-600 font-semibold mt-1">✓ File uploaded</p>}
-                </div>
-                <div className="space-y-2 md:col-span-2">
-                  <label className="text-sm font-bold text-slate-700">All India Referee Exam Passing Certificate</label>
-                  <input type="file" accept="image/*,.pdf" className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-akkfg-orange file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-akkfg-orange/10 file:text-akkfg-orange hover:file:bg-akkfg-orange/20" onChange={e => handleFileUpload(e, 'referee_cert')} />
-                  {formData.referee_cert && <p className="text-xs text-emerald-600 font-semibold mt-1">✓ File uploaded</p>}
                 </div>
               </div>
 
@@ -1196,6 +1269,25 @@ const Registration = ({ setActiveTab }: { setActiveTab: (tab: string) => void })
                 </div>
               </div>
 
+            </div>
+          )}
+
+          {/* Professional Info for Coaches */}
+          {formData.role === 'Coach' && (
+            <div className="space-y-6">
+              <h3 className="text-xl text-akkfg-blue font-bold border-l-4 border-akkfg-orange pl-4">Professional Information (Coach)</h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="space-y-2">
+                  <label className="text-sm font-bold text-slate-700">Coaching Certificate</label>
+                  <input required type="file" accept="image/*,.pdf" className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-akkfg-orange file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-akkfg-orange/10 file:text-akkfg-orange hover:file:bg-akkfg-orange/20" onChange={e => handleFileUpload(e, 'coaching_cert')} />
+                  {formData.coaching_cert && <p className="text-xs text-emerald-600 font-semibold mt-1">✓ File uploaded</p>}
+                </div>
+                <div className="space-y-2">
+                  <label className="text-sm font-bold text-slate-700">All India Referee Exam Passing Certificate</label>
+                  <input required type="file" accept="image/*,.pdf" className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-akkfg-orange file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-akkfg-orange/10 file:text-akkfg-orange hover:file:bg-akkfg-orange/20" onChange={e => handleFileUpload(e, 'referee_cert')} />
+                  {formData.referee_cert && <p className="text-xs text-emerald-600 font-semibold mt-1">✓ File uploaded</p>}
+                </div>
+              </div>
             </div>
           )}
 
@@ -1442,31 +1534,7 @@ const MediaNews = () => {
   );
 };
 
-const Downloads = () => (
-  <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
-    <h2 className="text-4xl text-akkfg-blue mb-12">Download Center</h2>
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-      {[
-        { title: 'Registration Forms', items: ['Player Registration Form', 'Coach Certification Form', 'District Association Form'] },
-        { title: 'Rules & Regulations', items: ['Official Kho-Kho Rulebook 2026', 'Tournament Guidelines', 'Anti-Doping Policy'] },
-        { title: 'Circulars & Notices', items: ['Annual General Meeting Notice', 'State Championship Circular', 'Election Notification'] },
-        { title: 'Results & Archives', items: ['State Championship 2025 Results', 'Annual Report 2024-25', 'Hall of Fame'] },
-      ].map((section, i) => (
-        <div key={i} className="bg-white p-8 rounded-3xl border border-slate-200">
-          <h3 className="text-xl text-akkfg-blue mb-6 border-b border-slate-100 pb-4">{section.title}</h3>
-          <ul className="space-y-4">
-            {section.items.map((item, j) => (
-              <li key={j} className="flex items-center justify-between group cursor-pointer">
-                <span className="text-slate-600 group-hover:text-akkfg-orange transition-colors">{item}</span>
-                <Download size={18} className="text-slate-400 group-hover:text-akkfg-orange transition-colors" />
-              </li>
-            ))}
-          </ul>
-        </div>
-      ))}
-    </div>
-  </div>
-);
+
 
 const Contact = () => {
   const [firstName, setFirstName] = useState('');
@@ -1538,7 +1606,7 @@ const Contact = () => {
               </div>
               <div>
                 <h4 className="font-bold text-akkfg-blue mb-1">Office Address</h4>
-                <p className="text-slate-600">Sports Complex, Stadium Road, Ahmedabad, Gujarat 380009</p>
+                <p className="text-slate-600">G/29, Ramway Plaza Dandia Bazar, Opposite Gandevikar, Vadodara, Gujarat 390001</p>
               </div>
             </div>
             <div className="flex gap-6">
@@ -1547,7 +1615,7 @@ const Contact = () => {
               </div>
               <div>
                 <h4 className="font-bold text-akkfg-blue mb-1">Phone Number</h4>
-                <p className="text-slate-600">+91 79 1234 5678</p>
+                <p className="text-slate-600">+91 99988 46555</p>
               </div>
             </div>
             <div className="flex gap-6">
@@ -1556,7 +1624,7 @@ const Contact = () => {
               </div>
               <div>
                 <h4 className="font-bold text-akkfg-blue mb-1">Email Address</h4>
-                <p className="text-slate-600">info@akkfgujarat.in</p>
+                <p className="text-slate-600">amateurkhokhofederationgujarat@gmail.com</p>
               </div>
             </div>
           </div>
@@ -1656,8 +1724,9 @@ const Dashboard = ({ user, onCompleteRegistration }: { user: User, onCompleteReg
     const cardElement = document.getElementById('akkfg-id-card-render');
     if (!cardElement) return;
 
+    setIsDownloading(true);
+
     try {
-      setIsDownloading(true);
       const canvas = await html2canvas(cardElement, {
         scale: 3, // High resolution scale factor
         useCORS: true, // Allow cross-origin images to render correctly
@@ -1665,22 +1734,15 @@ const Dashboard = ({ user, onCompleteRegistration }: { user: User, onCompleteReg
         logging: false
       });
 
-      const imgWidth = canvas.width;
-      const imgHeight = canvas.height;
-      const widthMm = 85.6; // credit card standard width in mm
-      const heightMm = (imgHeight / imgWidth) * widthMm;
-
-      const pdf = new jsPDF({
-        orientation: heightMm > widthMm ? 'portrait' : 'landscape',
-        unit: 'mm',
-        format: [widthMm, heightMm]
-      });
-
       const imgData = canvas.toDataURL('image/png');
-      pdf.addImage(imgData, 'PNG', 0, 0, widthMm, heightMm);
-      pdf.save(`AKKFG_ID_Card_${reg.unique_id || 'Player'}.pdf`);
+      const link = document.createElement('a');
+      link.href = imgData;
+      link.download = `AKKFG_ID_Card_${reg.unique_id || 'Player'}.png`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
     } catch (err: any) {
-      console.error('Error exporting ID card as PDF:', err);
+      console.error('Error exporting ID card as PNG:', err);
       alert(`Unable to export ID card. Error Details: ${err?.message || err}`);
     } finally {
       setIsDownloading(false);
@@ -1728,7 +1790,7 @@ const Dashboard = ({ user, onCompleteRegistration }: { user: User, onCompleteReg
                 <div>
                   <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">Account Role</p>
                   <p className="font-bold text-akkfg-orange">
-                    {registration.role === 'Student' ? 'Player' : registration.role === 'Technical' ? 'Technical Team' : registration.role}
+                    {registration.role === 'Student' ? 'Player' : registration.role === 'Technical' ? 'Technical Official' : registration.role}
                   </p>
                 </div>
               )}
@@ -1751,7 +1813,7 @@ const Dashboard = ({ user, onCompleteRegistration }: { user: User, onCompleteReg
                 <div className="grid grid-cols-1 gap-6 text-sm">
                   <div className="p-4 bg-slate-50 rounded-xl">
                     <p className="text-xs font-bold text-slate-400 uppercase mb-1">Registered Role</p>
-                    <p className="font-bold text-akkfg-blue">{registration.role === 'Student' ? 'Player' : registration.role === 'Technical' ? 'Technical Team' : registration.role}</p>
+                    <p className="font-bold text-akkfg-blue">{registration.role === 'Student' ? 'Player' : registration.role === 'Technical' ? 'Technical Official' : registration.role}</p>
                   </div>
                 </div>
               </div>
@@ -1781,11 +1843,10 @@ const Dashboard = ({ user, onCompleteRegistration }: { user: User, onCompleteReg
                   type="button"
                   disabled={isDownloading}
                   onClick={() => handleDownloadPDF(registration)}
-                  className={`w-full text-white py-3.5 px-6 rounded-xl font-bold text-md shadow-md transition-all flex items-center justify-center gap-2 ${
-                    isDownloading
-                      ? 'bg-slate-400 cursor-not-allowed'
-                      : 'bg-akkfg-orange hover:bg-akkfg-orange/95 hover:shadow-lg'
-                  }`}
+                  className={`w-full text-white py-3.5 px-6 rounded-xl font-bold text-md shadow-md transition-all flex items-center justify-center gap-2 ${isDownloading
+                    ? 'bg-slate-400 cursor-not-allowed'
+                    : 'bg-akkfg-orange hover:bg-akkfg-orange/95 hover:shadow-lg'
+                    }`}
                 >
                   <Download size={18} className={isDownloading ? 'animate-bounce' : ''} />
                   {isDownloading ? 'Downloading...' : 'Download ID Card'}
@@ -2524,7 +2585,7 @@ const AdminPanel = () => {
 
                 {selectedPlayer.role === 'Student' && (
                   <div>
-                    <h4 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">Education Info</h4>
+                    <h4 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">Education & ID Info</h4>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       <div className="bg-slate-50 p-3 rounded-xl">
                         <p className="text-[10px] text-slate-400 uppercase font-bold">Level Passing</p>
@@ -2533,6 +2594,14 @@ const AdminPanel = () => {
                       <div className="bg-slate-50 p-3 rounded-xl">
                         <p className="text-[10px] text-slate-400 uppercase font-bold">Year of Passing</p>
                         <p className="font-bold text-akkfg-blue">{selectedPlayer.year_passing || 'N/A'}</p>
+                      </div>
+                      <div className="bg-slate-50 p-3 rounded-xl">
+                        <p className="text-[10px] text-slate-400 uppercase font-bold">KKFI ID</p>
+                        <p className="font-bold text-akkfg-blue">{selectedPlayer.kkfi_id || 'N/A'}</p>
+                      </div>
+                      <div className="bg-slate-50 p-3 rounded-xl">
+                        <p className="text-[10px] text-slate-400 uppercase font-bold">NSRS ID</p>
+                        <p className="font-bold text-akkfg-blue">{selectedPlayer.nsrs_id || 'N/A'}</p>
                       </div>
                     </div>
                   </div>
@@ -2640,7 +2709,7 @@ const AdminPanel = () => {
                           <p className="text-[10px] font-mono text-slate-400 break-all">{reg.unique_id || 'Pending Approval'}</p>
                         </div>
                         <span className={`shrink-0 px-2 py-1 rounded-md text-[10px] font-bold uppercase ${reg.role === 'Coach' ? 'bg-purple-100 text-purple-700' : reg.role === 'Technical' ? 'bg-amber-100 text-amber-700' : 'bg-blue-100 text-blue-700'}`}>
-                          {reg.role === 'Student' ? 'Player' : reg.role === 'Technical' ? 'Technical Team' : reg.role}
+                          {reg.role === 'Student' ? 'Player' : reg.role === 'Technical' ? 'Technical Official' : reg.role}
                         </span>
                       </div>
                       <div className="flex items-center justify-between gap-3 text-sm">
@@ -2703,7 +2772,7 @@ const AdminPanel = () => {
                           </td>
                           <td className="px-6 py-4">
                             <span className={`px-2 py-1 rounded-md text-[10px] font-bold uppercase ${reg.role === 'Coach' ? 'bg-purple-100 text-purple-700' : reg.role === 'Technical' ? 'bg-amber-100 text-amber-700' : 'bg-blue-100 text-blue-700'}`}>
-                              {reg.role === 'Student' ? 'Player' : reg.role === 'Technical' ? 'Technical Team' : reg.role}
+                              {reg.role === 'Student' ? 'Player' : reg.role === 'Technical' ? 'Technical Official' : reg.role}
                             </span>
                           </td>
                           <td className="px-6 py-4 text-sm text-slate-600">{reg.address_city}</td>
@@ -3052,7 +3121,6 @@ export default function App() {
             {activeTab === 'events' && <Events />}
             {activeTab === 'register' && <Registration setActiveTab={setActiveTab} />}
             {activeTab === 'media' && <MediaNews />}
-            {activeTab === 'downloads' && <Downloads />}
             {activeTab === 'contact' && <Contact />}
             {activeTab === 'dashboard' && user && (
               <Dashboard

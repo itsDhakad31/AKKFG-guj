@@ -266,6 +266,25 @@ const getYearFromDateValue = (value: string | null | undefined) => {
 // API Routes - ALL /api/*
 app.get('/api/ping', (req, res) => res.json({ message: 'pong' }));
 
+app.get('/api/proxy-image', async (req, res) => {
+  const url = req.query.url as string;
+  if (!url) {
+    return res.status(400).send('URL parameter is required');
+  }
+  try {
+    const response = await fetch(url);
+    const contentType = response.headers.get('content-type') || 'application/octet-stream';
+    const buffer = Buffer.from(await response.arrayBuffer());
+    
+    res.setHeader('Content-Type', contentType);
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.send(buffer);
+  } catch (err) {
+    console.error('Failed to proxy image:', err);
+    res.status(500).send('Failed to proxy image');
+  }
+});
+
 app.get('/api/healthz', (req, res) => {
   res.json({ ok: true, supabaseReady });
 });
@@ -734,7 +753,7 @@ app.put('/api/admin/registrations/:id/status', authMiddleware, isAdminMiddleware
     await supabaseAdmin.from('users').update({ role: userRole }).eq('email', reg.email);
     
     // Asynchronously send approval email with dynamic AKKFG, KKFI, and NSRS credentials
-    sendApprovalEmail(reg.email, reg.name, reg.role, unique_id, reg.dob, reg.gender)
+    sendApprovalEmail(reg.email, reg.name, reg.role, unique_id, reg.dob, reg.gender, reg.kkfi_id, reg.nsrs_id)
       .catch(err => console.error('Error sending registration approval email:', err));
   }
 

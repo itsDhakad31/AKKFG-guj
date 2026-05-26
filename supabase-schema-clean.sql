@@ -80,6 +80,8 @@ CREATE TABLE public.registrations (
   coaching_cert TEXT,
   edu_qualification TEXT,
   referee_cert TEXT,
+  kkfi_id TEXT,
+  nsrs_id TEXT,
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
 

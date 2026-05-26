@@ -66,6 +66,8 @@ CREATE TABLE IF NOT EXISTS public.registrations (
   coaching_cert TEXT,
   edu_qualification TEXT,
   referee_cert TEXT,
+  kkfi_id TEXT,
+  nsrs_id TEXT,
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
 ALTER TABLE public.registrations ENABLE ROW LEVEL SECURITY;

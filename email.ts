@@ -37,7 +37,9 @@ export const sendApprovalEmail = async (
   role: string,
   uniqueId: string,
   dob: string,
-  gender: string
+  gender: string,
+  kkfiId?: string,
+  nsrsId?: string
 ): Promise<boolean> => {
   try {
     const transporter = createTransporter();
@@ -46,9 +48,9 @@ export const sendApprovalEmail = async (
       return false;
     }
 
-    const roleLabel = role === 'Student' ? 'Player' : role === 'Technical' ? 'Technical Team' : role;
-    const kkfiId = uniqueId.replace('AKKFG', 'KKFI');
-    const nsrsId = uniqueId.replace('AKKFG', 'NSRS');
+    const roleLabel = role === 'Student' ? 'Player' : role === 'Technical' ? 'Technical Official' : role;
+    const finalKkfiId = kkfiId || 'PENDING';
+    const finalNsrsId = nsrsId || 'PENDING';
     const fromAddress = process.env.SMTP_FROM || '"Amateur Kho-Kho Federation Gujarat" <no-reply@akkfg.com>';
 
     const htmlContent = `
@@ -256,16 +258,16 @@ export const sendApprovalEmail = async (
             
             <div class="id-grid">
               <div class="id-row">
-                <span class="id-label">AKKFG ID:</span>
+                <span class="id-label">UID:</span>
                 <span class="id-value">${uniqueId}</span>
               </div>
               <div class="id-row">
                 <span class="id-label">KKFI ID:</span>
-                <span class="id-value">${kkfiId}</span>
+                <span class="id-value">${finalKkfiId}</span>
               </div>
               <div class="id-row">
                 <span class="id-label">NSRS ID:</span>
-                <span class="id-value">${nsrsId}</span>
+                <span class="id-value">${finalNsrsId}</span>
               </div>
             </div>
 
