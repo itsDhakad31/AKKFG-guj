@@ -30,7 +30,24 @@ export default defineConfig(({mode}) => {
         }
       },
     },
-
+    build: {
+      chunkSizeWarningLimit: 1600,
+      rollupOptions: {
+        output: {
+          manualChunks(id) {
+            if (id.includes('node_modules')) {
+              if (id.includes('jspdf') || id.includes('html2canvas') || id.includes('html2canvas-pro')) {
+                return 'export-libs';
+              }
+              if (id.includes('lucide-react')) {
+                return 'lucide-icons';
+              }
+              return 'vendor';
+            }
+          }
+        }
+      }
+    }
   };
 });
 
