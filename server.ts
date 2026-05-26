@@ -8,7 +8,7 @@ import http from "http";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { supabase, supabaseAdmin } from "./src/supabase";
-import { sendApprovalEmail } from "./email";
+import { sendApprovalEmail, sendDeclineEmail } from "./email";
 
 function requireEnv(name: string) {
   const v = process.env[name];
@@ -752,9 +752,13 @@ app.put('/api/admin/registrations/:id/status', authMiddleware, isAdminMiddleware
     const userRole = reg.role === 'Coach' ? 'Coach' : 'Player';
     await supabaseAdmin.from('users').update({ role: userRole }).eq('email', reg.email);
     
-    // Asynchronously send approval email with dynamic AKKFG, KKFI, and NSRS credentials
-    sendApprovalEmail(reg.email, reg.name, reg.role, unique_id, reg.dob, reg.gender, reg.kkfi_id, reg.nsrs_id)
+    // Asynchronously send approval email with dynamic credentials and dynamic ID card PDF attachment
+    sendApprovalEmail(reg.email, reg.name, reg.role, unique_id, reg.dob, reg.gender, reg.kkfi_id, reg.nsrs_id, reg.doc_photo)
       .catch(err => console.error('Error sending registration approval email:', err));
+  } else if (status === 'Rejected' && reg && reg.email) {
+    // Asynchronously send decline email
+    sendDeclineEmail(reg.email, reg.name, reg.role)
+      .catch(err => console.error('Error sending registration decline email:', err));
   }
 
   res.json({ success: true, unique_id });
