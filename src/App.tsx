@@ -952,6 +952,7 @@ const Registration = ({ setActiveTab }: { setActiveTab: (tab: string) => void })
     nsrs_id: ''
   });
   const [submitted, setSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [result, setResult] = useState<RegistrationData | null>(null);
   const [acceptedTerms, setAcceptedTerms] = useState(false);
 
@@ -1004,6 +1005,8 @@ const Registration = ({ setActiveTab }: { setActiveTab: (tab: string) => void })
       return;
     }
 
+    setIsSubmitting(true);
+
     const formDataToSend = new FormData();
     Object.keys(formData).forEach(key => {
       const value = (formData as any)[key];
@@ -1038,6 +1041,8 @@ const Registration = ({ setActiveTab }: { setActiveTab: (tab: string) => void })
       }
     } catch (err) {
       alert("Network error. Please check your connection.");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -1077,6 +1082,13 @@ const Registration = ({ setActiveTab }: { setActiveTab: (tab: string) => void })
 
   return (
     <div className="max-w-5xl mx-auto py-20 px-4">
+      {isSubmitting && (
+        <div className="fixed inset-0 z-[200] flex flex-col items-center justify-center bg-slate-900/80 backdrop-blur-md text-white space-y-4">
+          <div className="w-16 h-16 border-4 border-akkfg-orange border-t-transparent rounded-full animate-spin"></div>
+          <p className="text-xl font-bold">Uploading Documents & Registering...</p>
+          <p className="text-sm text-slate-400 font-medium">Please do not close this window or refresh the page.</p>
+        </div>
+      )}
       <div className="bg-white rounded-3xl shadow-xl overflow-hidden border border-slate-200">
         <div className="bg-akkfg-blue p-8 text-white flex flex-col md:flex-row md:items-center md:justify-between gap-6">
           <div>
@@ -1335,8 +1347,12 @@ const Registration = ({ setActiveTab }: { setActiveTab: (tab: string) => void })
             </div>
           </div>
 
-          <button type="submit" className="w-full bg-akkfg-orange text-white py-5 rounded-2xl font-bold text-xl shadow-xl hover:bg-akkfg-orange/90 transition-all">
-            Submit Registration
+          <button 
+            disabled={isSubmitting} 
+            type="submit" 
+            className="w-full bg-akkfg-orange text-white py-5 rounded-2xl font-bold text-xl shadow-xl hover:bg-akkfg-orange/90 transition-all disabled:opacity-50 flex items-center justify-center gap-3"
+          >
+            {isSubmitting ? 'Submitting Registration...' : 'Submit Registration'}
           </button>
         </form>
       </div>
