@@ -1,117 +1,194 @@
-# Amateur Kho-Kho Federation Gujarat
+# 🏃 Amateur Kho Kho Federation Gujarat Website
 
-Full-stack app for player registration, events, news, and admin management.
+A modern and responsive sports federation website developed for the Amateur Kho Kho Federation Gujarat (AKKFG).  
+This platform is designed to promote Kho Kho across Gujarat by showcasing tournaments, federation activities, announcements, player development programs, and sports-related updates.
 
-## Features
-- User auth (register/login with JWT)
-- News & Events API (Supabase)
-- Registration form with docs
-- Admin dashboard (events, registrations, stats)
-- React frontend + Tailwind + Vite
-- Hono API backend (mounted via Express/Vite)
-- **Supabase PostgreSQL database**
+---
 
-## Quick Setup
+# 🌐 Live Website
 
-**Prerequisites:** Node.js 20+
+https://amateur-kho-kho-federation-gujarat.onrender.com
 
-1. **Install:**
-   ```
-   npm install
-   ```
+---
 
-2. **Environment:**
-   ```
-   cp .env.example .env
-   ```
-   `.env.example` includes Supabase URL/Key and optional default admin credentials.
+# 📂 GitHub Repository
 
-3. **Supabase Tables:** Run `supabase-schema.sql` in dashboard SQL editor.
+https://github.com/itsDhakad31/AKKFG-guj
 
-4. **Development:**
-   ```
-   npm run dev
-   ```
-   ↗️ Open http://localhost:3000
+---
 
-5. **Production:**
-   ```
-   npm run build
-   npm start
-   ```
+# ✨ Features
 
-## API Endpoints (`http://localhost:3000/api`)
-| Method | Endpoint | Description | Auth |
-|--------|----------|-------------|------|
-| GET | `/ping` | Health check | - |
-| GET | `/news` | List news | Public |
-| GET | `/events` | List events | Public |
-| POST | `/auth/register` | Create Player/Coach (Admin reserved) | - |
-| POST | `/auth/login` | JWT token | - |
-| POST | `/register` | Submit registration form | Public |
-| GET `/admin/*` | Admin dashboard APIs | Stats, registrations, news/events CRUD | Admin JWT |
+- Fully Responsive Design
+- Modern Sports-Themed UI
+- Federation Information
+- Tournament & Event Updates
+- News & Announcements Section
+- Gallery Section
+- Contact & Inquiry Form
+- Smooth Navigation
+- Mobile-Friendly Layout
+- SEO Optimized Structure
 
-**Admin Login:** `admin@akkfg.com` / `admin123`
-- Run updated `supabase-schema.sql` to seed.
-- If the seed was skipped, the backend still accepts the default admin credentials from `.env`.
-- Features: Approve registrations, manage tournaments/news, view stats.
+---
 
-## Database
-**Primary:** Supabase Postgres (URL/Key in `.env`).
-- Tables: `users`, `news`, `events`, `registrations`
-- RLS policies enabled (public read, auth write)
+# 🛠️ Detailed Tech Stack
 
-**Legacy:** Local `database.sqlite` (unused, safe to delete).
+## 🎨 Frontend Technologies
 
-## Scripts
-- `npm run dev` - Dev server + HMR
-- `npm run build` - Vite production build
-- `npm run start` - Production server
-- `npm run lint` - TypeScript check
+* HTML5
+* CSS3
+* JavaScript
+* Bootstrap
+* Tailwind CSS
+---
 
-## Deployment
-**Render:** this repo includes [render.yaml](/Users/mihuldhakad/Downloads/amateur-kho-kho-federation-gujarat/render.yaml) for a single Node web service.
+# ⚙️ Backend Technologies
 
-Build command:
-```bash
-npm install && npm run build
-```
+* Node.js
+* Express.js
+---
 
-Start command:
-```bash
-npm start
-```
+# 🗄️ Database Technologies
 
-Set these environment variables in Render:
-- `SUPABASE_URL`
-- `SUPABASE_ANON_KEY`
-- `SUPABASE_SERVICE_ROLE_KEY`
-- `JWT_SECRET`
-- `DEFAULT_ADMIN_EMAIL`
-- `DEFAULT_ADMIN_PASSWORD`
+## MongoDB
 
-## Running with Docker
+* Supabase
 
-You can run the entire application using Docker for a seamless local development experience with zero prerequisites other than Docker.
+---
 
-### 1. Development Mode (with Live Reloading)
-To run the application in development mode with active file watching and hot-reloading (HMR):
-```bash
-docker-compose up
-```
-This automatically binds your local files into the container. When you make edits in `src/`, they will immediately hot-reload in your browser.
+# ☁️ Deployment & Hosting
 
-- **Frontend & Backend:** http://localhost:3000
+* Render
 
-### 2. Production Mode (Built Container)
-To build and run the application as a single optimized production container:
-```bash
-# Build the Docker image
-docker build -t akkfg-app .
 
-# Run the container
-docker run -p 3000:3000 --env-file .env akkfg-app
-```
+---
 
-Enjoy managing Amateur Kho-Kho Federation Gujarat! 🥅🇮🇳
+# 🔧 Development Tools
 
+#* Git
+* GitHub
+* VS Code
+* Antigravity
+
+---
+
+**Development Approach**
+
+This project was developed with the assistance of Vibecode AI for faster development, UI generation, and workflow optimization.
+The complete project structure, customization, feature integration, debugging, deployment, and final implementation were handled and managed by the developer.
+
+AI-assisted development helped in:
+
+* Accelerating frontend development
+* Improving UI/UX workflow
+* Generating reusable components
+* Optimizing development speed
+* Enhancing productivity during implementation
+
+The project was further customized, modified, and deployed according to the requirements of the Amateur Kho Kho Federation Gujarat platform.
+
+---
+
+# 📸 Website Sections
+
+## 🏠 Home Page
+A modern landing page introducing the Amateur Kho Kho Federation Gujarat and its mission.
+
+## 🏆 Tournaments & Events
+Displays upcoming and ongoing Kho Kho competitions and activities.
+
+## 👥 About Federation
+Information regarding the federation’s vision, mission, and sports development goals.
+
+## 📰 News & Updates
+Latest announcements, notices, and federation updates.
+
+## 🖼️ Gallery
+Sports event photos and tournament highlights.
+
+## 📞 Contact Section
+Easy communication through contact forms and federation details.
+
+---
+
+# 🚀 Installation & Setup
+
+Clone the repository:
+
+bash id="gh3k2q" git clone https://github.com/itsDhakad31/AKKFG-guj.git 
+
+Move into the project directory:
+
+bash id="kj28mz" cd AKKFG-guj 
+
+Install dependencies:
+
+bash id="rj82mx" npm install 
+
+Start the development server:
+
+bash id="n8a21v" npm start 
+
+---
+
+# 📱 Responsive Design
+
+Optimized for:
+- Desktop
+- Tablet
+- Mobile Devices
+
+---
+
+# 🎯 Project Objective
+
+The main purpose of this project is to digitally promote the traditional Indian sport Kho Kho and provide a professional platform for:
+- Tournament management visibility
+- Federation communication
+- Sports awareness
+- Player engagement
+- Community development
+
+---
+
+# 🏅 About Kho Kho
+
+Kho Kho is one of India’s oldest traditional sports focused on speed, agility, teamwork, and strategy.  
+The sport has rapidly grown in popularity through national and international tournaments organized under the Kho Kho Federation of India (KKFI).
+
+---
+
+# 📌 Future Improvements
+
+- Player Registration System
+- Admin Dashboard
+- Match Scheduling
+- Live Tournament Updates
+- Team Management System
+- Authentication & Authorization
+- Dynamic Database Integration
+- Performance Analytics Dashboard
+
+---
+
+# 👨‍💻 Developer
+
+Developed by Mihul Dhakad
+
+GitHub: https://github.com/itsDhakad31
+
+---
+
+# 📄 License
+
+This project is licensed under the MIT License.
+
+---
+
+# 🙌 Acknowledgements
+
+Special thanks to:
+- Amateur Kho Kho Federation Gujarat
+- Kho Kho Federation of India (KKFI)
+- All Kho Kho players and supporters promoting indigenous Indian
